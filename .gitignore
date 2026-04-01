@@ -1,0 +1,29 @@
+# Node.js
+node_modules/
+dist/
+.env
+.vercel
+
+# Node.js Installation Files (detected in root)
+bin/
+include/
+lib/
+share/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.env
+.pytest_cache/
+
+# Databases
+*.sqlite
+*.db
+
+# OS
+.DS_Store
+Thumbs.db

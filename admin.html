@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ʇ-Tech | Mission Control</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <nav>
+        <a href="/" class="logo"><span class="flip">T</span>-Tech</a>
+        <div class="nav-links">
+            <a href="/" id="nav-return">Return to Eco</a>
+            <a href="#" id="nav-logout-admin">Logout</a>
+        </div>
+    </nav>
+
+    <section class="dashboard">
+        <div class="flex justify-between items-center mb-12 w-full max-w-7xl">
+            <div>
+                <h2 class="text-4xl font-black uppercase mb-2">Mission Control</h2>
+                <p class="text-gray-500 font-bold uppercase text-[0.6rem] tracking-[0.3em]">Administrator Dashboard -
+                    Strict Access</p>
+            </div>
+            <button id="refresh-admin-btn" class="btn-primary">Sync All Records</button>
+        </div>
+
+        <div class="w-full max-w-7xl">
+            <table id="admin-requests-table" class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Specialist Email</th>
+                        <th>Service Type</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-table-body">
+                    <!-- Populated by JS -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
