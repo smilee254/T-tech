@@ -1,51 +1,58 @@
-from fastapi import FastAPI, Header, Depends
+from fastapi import FastAPI, Header, Depends, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import create_engine, Column, Integer, String, Boolean, Text, ForeignKey, DateTime
+from sqlalchemy import create_engine, Column, Integer, String, Boolean, Text, ForeignKey, DateTime, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session, relationship
 from sqlalchemy.sql import func
 from pydantic import BaseModel, EmailStr
 from typing import List, Optional
 import os
+import traceback
 from passlib.context import CryptContext
 
 # --- CONFIGURATION ---
 ADMIN_WHITELIST = ["mwanglewis6@gmail.com", "patrickkimani1030@gmail.com"]
-ADMIN_SECRET_KEY = os.getenv("ADMIN_SECRET_KEY", "T-TECH-COMMAND-2024") # Set as env var or default for dev
+ADMIN_SECRET_KEY = os.getenv("ADMIN_SECRET_KEY", "T-TECH-COMMAND-2024")
 
 # --- 1. Database Connection Logic ---
 DATABASE_URL = os.getenv("POSTGRES_URL", "sqlite:///./t-tech-main.db")
 
-# Vercel Serverless Fix: Ensure SQLite uses /tmp if not on Postgres
-if "sqlite" in DATABASE_URL and os.getenv("VERCEL"):
-    DATABASE_URL = "sqlite:////tmp/t-tech-main.db"
-
+# Force Postgres URL normalization for SQLAlchemy 2.0+
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
-engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+# Vercel / Cloud Fix: Enable SSL for Postgres
+if "postgresql" in DATABASE_URL and "sslmode" not in DATABASE_URL:
+    DATABASE_URL += "?sslmode=require"
+
+# Vercel Serverless Fix: Ensure SQLite uses /tmp
+if "sqlite" in DATABASE_URL and os.getenv("VERCEL"):
+    DATABASE_URL = "sqlite:////tmp/t-tech-main.db"
+
+# Create Engine with Pooling
+engine = create_engine(
+    DATABASE_URL, 
+    pool_pre_ping=True, # Critical for Celeron/Serverless keep-alive
+    echo=False # Set to True for DB debugging
+)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# --- 2. Table 1: users (The Identity Vault) ---
+# --- 2. Tables ---
 class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String(255), unique=True, index=True, nullable=False)
-    phone_number = Column(String(20), nullable=True) # Added for WhatsApp/Contact
+    phone_number = Column(String(20), nullable=True)
     password_hash = Column(String(255), nullable=False)
     is_verified = Column(Boolean, default=False)
     is_admin = Column(Boolean, default=False)
     
     requests = relationship("ServiceRequest", back_populates="owner")
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-# --- 3. Table 2: service_requests (The Mission Ledger) ---
 class ServiceRequest(Base):
     __tablename__ = "service_requests"
     id = Column(Integer, primary_key=True, index=True)
@@ -57,13 +64,7 @@ class ServiceRequest(Base):
 
     owner = relationship("User", back_populates="requests")
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-# --- 4. Core Functions ---
-def create_db():
-    Base.metadata.create_all(bind=engine)
-
+# --- 3. Core Functions ---
 def get_db():
     db = SessionLocal()
     try:
@@ -71,47 +72,45 @@ def get_db():
     finally:
         db.close()
 
-async def submit_request(db: Session, user_id: int, service_type: str, description: str):
-    new_request = ServiceRequest(
-        user_id=user_id,
-        service_type=service_type,
-        description=description
-    )
-    db.add(new_request)
-    db.commit()
-    db.refresh(new_request)
-    return new_request
-
-def get_admin_view(db: Session):
-    return db.query(ServiceRequest, User).join(User, ServiceRequest.user_id == User.id).all()
-
-# --- FastAPI Implementation ---
-app = FastAPI(title="Ʇ-Tech | Professional Database & API")
+# --- 4. FastAPI Setup ---
+app = FastAPI(title="Ʇ-Tech | Unified Backend")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Open for deployment diagnostics
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-import traceback
-
+# Global Crash Diagnostic
 @app.exception_handler(Exception)
-async def global_exception_handler(request, exc):
+async def global_exception_handler(request: Request, exc: Exception):
+    error_trace = traceback.format_exc()
+    print(error_trace) # Visible in Vercel/CLI logs
     return JSONResponse(
         status_code=500,
         content={
             "error": "Mission Control Crash",
             "details": str(exc),
-            "traceback": traceback.format_exc()
+            "traceback": error_trace if os.getenv("DEBUG") else "Cloud-Restricted"
         }
     )
 
 @app.on_event("startup")
 def on_startup():
-    create_db()
+    # 1. Create tables if they don't exist
+    Base.metadata.create_all(bind=engine)
+    
+    # 2. Migration Check: Ensure missing columns exist in existing tables
+    with engine.connect() as conn:
+        try:
+            # Check for is_admin column in users
+            conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS phone_number TEXT;"))
+            conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT FALSE;"))
+            conn.commit()
+        except Exception as e:
+            print(f"Migration: Columns already exist or {e}")
 
 # --- Schemas ---
 class AuthRequest(BaseModel):
@@ -124,11 +123,8 @@ class RequestCreate(BaseModel):
     service_type: str
     description: str
 
-# --- Helper for JSON Errors ---
 def error_response(message: str, status_code: int = 400):
     return JSONResponse(status_code=status_code, content={"error": message})
-
-# --- Endpoints ---
 
 # --- Endpoints ---
 
@@ -138,11 +134,9 @@ def root():
 
 @app.post("/api/auth/public")
 async def public_auth(req: AuthRequest, db: Session = Depends(get_db)):
-    # 1. Check if user exists
     db_user = db.query(User).filter(User.email == req.email).first()
     
     if db_user:
-        # Verify Password
         if not pwd_context.verify(req.password, db_user.password_hash):
             return error_response("Password Invalid.", 401)
         
@@ -152,7 +146,6 @@ async def public_auth(req: AuthRequest, db: Session = Depends(get_db)):
             "is_admin": db_user.is_admin
         }
     else:
-        # JOIN THE MISSION (Auto-Register)
         if not req.phone_number:
             return error_response("Phone Number required for new specialists.", 400)
             
@@ -176,13 +169,11 @@ async def public_auth(req: AuthRequest, db: Session = Depends(get_db)):
 
 @app.post("/api/auth/admin")
 async def admin_auth(req: AuthRequest, db: Session = Depends(get_db)):
-    # Strict Whitelist Check
     if req.email not in ADMIN_WHITELIST:
-        return error_response("Access Denied: Not a Whitelisted Specialist.", 403)
+        return error_response("Access Denied.", 403)
         
-    # Verify Secret Key
     if req.password != ADMIN_SECRET_KEY:
-        return error_response("Specialist Secret Key Invalid.", 401)
+        return error_response("Secret Key Invalid.", 401)
         
     return {
         "redirect": "/admin.html",
@@ -197,19 +188,23 @@ async def api_submit_request(req: RequestCreate, db: Session = Depends(get_db)):
         return error_response("User not found.", 404)
     
     if not db_user.is_verified and not db_user.is_admin:
-        return error_response("Verification Required to access The Vault.", 403)
+        return error_response("Verification Required.", 403)
     
-    await submit_request(db, db_user.id, req.service_type, req.description)
-    return {"message": "Logged in The Vault. Specialist has been notified."}
+    new_request = ServiceRequest(
+        user_id=db_user.id,
+        service_type=req.service_type,
+        description=req.description
+    )
+    db.add(new_request)
+    db.commit()
+    return {"message": "Mission Logged."}
 
 @app.get("/api/admin/requests")
 async def admin_requests(admin_email: Optional[str] = Header(None), db: Session = Depends(get_db)):
     if admin_email not in ADMIN_WHITELIST:
-        return error_response("Admin authorization failed.", 403)
+        return error_response("Auth Failed.", 403)
     
-    # JOIN ServiceRequest with User to get phone_number
     results = db.query(ServiceRequest, User).join(User, ServiceRequest.user_id == User.id).all()
-    
     output = []
     for req, user in results:
         output.append({
@@ -230,11 +225,11 @@ async def resolve_request(request_id: int, admin_email: Optional[str] = Header(N
     
     req = db.query(ServiceRequest).filter(ServiceRequest.id == request_id).first()
     if not req:
-        return error_response("Request not found", 404)
+        return error_response("Not found", 404)
     
     req.status = "Resolved"
     db.commit()
-    return {"message": "Request marked as Resolved"}
+    return {"message": "Resolved"}
 
 @app.delete("/api/admin/delete/{request_id}")
 async def delete_request(request_id: int, admin_email: Optional[str] = Header(None), db: Session = Depends(get_db)):
@@ -243,18 +238,18 @@ async def delete_request(request_id: int, admin_email: Optional[str] = Header(No
     
     req = db.query(ServiceRequest).filter(ServiceRequest.id == request_id).first()
     if not req:
-        return error_response("Request not found", 404)
+        return error_response("Not found", 404)
     
     db.delete(req)
     db.commit()
-    return {"message": "Request purged from Vault"}
+    return {"message": "Purged"}
 
 @app.post("/api/verify")
 async def verify(email: str, db: Session = Depends(get_db)):
     db_user = db.query(User).filter(User.email == email).first()
     if not db_user:
-        return error_response("User not found.", 404)
+        return error_response("Not found", 404)
     
     db_user.is_verified = True
     db.commit()
-    return {"message": "Email Verified. Specialist permissions granted."}
+    return {"message": "Verified"}
