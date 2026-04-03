@@ -212,3 +212,97 @@ if (logoutBtn) {
         window.location.href = 'index.html';
     };
 }
+
+// --- TECH PARTICLE ENGINE (Converging & Diverging) ---
+const initParticles = () => {
+    const canvas = document.getElementById('canvas1');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particlesArray = [];
+    const numberOfParticles = Math.min(450, (canvas.width * canvas.height) / 400);
+    let formationActive = false;
+
+    const colors = ['#4B0082', '#0047AB', '#008B8B', '#6F42C1', '#1E90FF'];
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.vx = (Math.random() - 0.5) * 1.2;
+            this.vy = (Math.random() - 0.5) * 1.2;
+            this.size = Math.random() * 8 + 4;
+            this.color = colors[Math.floor(Math.random() * colors.length)];
+            this.char = ['T', 'E', 'C', 'H'][Math.floor(Math.random() * 4)];
+            this.targetX = this.x;
+            this.targetY = this.y;
+        }
+
+        draw() {
+            ctx.fillStyle = this.color;
+            ctx.font = `900 ${this.size}px monospace`;
+            ctx.fillText(this.char, this.x, this.y);
+        }
+
+        update() {
+            if (formationActive) {
+                let dx = this.targetX - this.x;
+                let dy = this.targetY - this.y;
+                this.x += dx * 0.08;
+                this.y += dy * 0.08;
+                if (Math.abs(dx) < 1) this.color = '#e8ff47';
+            } else {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x > canvas.width || this.x < 0) this.vx *= -1;
+                if (this.y > canvas.height || this.y < 0) this.vy *= -1;
+            }
+            this.draw();
+        }
+    }
+
+    const init = () => {
+        particlesArray = [];
+        for (let i = 0; i < numberOfParticles; i++) {
+            particlesArray.push(new Particle());
+        }
+    };
+
+    const animate = () => {
+        ctx.fillStyle = 'rgba(2, 2, 5, 0.15)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < particlesArray.length; i++) {
+            particlesArray[i].update();
+        }
+        requestAnimationFrame(animate);
+    };
+
+    const createFormation = () => {
+        formationActive = true;
+        const radius = Math.min(canvas.width, canvas.height) * 0.35;
+        particlesArray.forEach((p, i) => {
+            const angle = i * ((Math.PI * 2) / numberOfParticles) * 15;
+            p.targetX = canvas.width / 2 + Math.cos(angle) * radius;
+            p.targetY = canvas.height / 2 + Math.sin(angle) * radius;
+        });
+
+        setTimeout(() => {
+            formationActive = false;
+        }, 3000);
+    };
+
+    setInterval(createFormation, 10000);
+    init();
+    animate();
+
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        init();
+    });
+};
+
+window.addEventListener('DOMContentLoaded', initParticles);

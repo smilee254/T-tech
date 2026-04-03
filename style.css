@@ -23,38 +23,14 @@ body {
     overflow-x: hidden;
 }
 
-/* --- LANDING TOGETHER/APART ANIMATION --- */
-.landing-bg {
-    background: radial-gradient(circle at center, #111, #000);
-    overflow: hidden;
+#canvas1 {
     position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1;
-}
-
-.particle {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background: var(--primary);
-    border-radius: 50%;
-    filter: blur(2px);
-    animation: togetherApart 10s infinite ease-in-out;
-}
-
-@keyframes togetherApart {
-
-    0%,
-    100% {
-        transform: translate(0, 0) scale(1);
-        opacity: 0.3;
-    }
-
-    50% {
-        transform: translate(var(--tx), var(--ty)) scale(2);
-        opacity: 0.8;
-    }
+    z-index: -2;
+    background: #020205;
 }
 
 /* --- 50/50 SPLIT VIEW (LOGIN) --- */
