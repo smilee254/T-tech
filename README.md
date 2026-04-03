@@ -1,33 +1,49 @@
-Ʇ-Tech: Flipping the Script 
-Ʇ-Tech is a high-performance, student-led technical startup designed to bridge the gap between complex hardware/software issues and efficient, specialist-driven solutions. Built on a "Zero-Lag" architecture, it delivers a premium service experience through a custom-built Glassmorphism interface and a robust FastAPI/PostgreSQL backend.
+# Ʇ-Tech | Professional Service Ecosystem
 
-The Vision
-Ʇ-Tech was established to redefine modern technical support. We move beyond simple repairs to provide specialized advancements in Web Development, KRA/Administrative support, and Hardware Engineering.
+![Ʇ-Tech Logo Banner](https://raw.githubusercontent.com/smilee254/T-tech/main/frontend/screenshot-placeholder.png)
 
--Tech Stack
-Designed for maximum efficiency on resource-constrained hardware (Intel Celeron Optimized):
+## ⚡️ Flip the Script.
+Ʇ-Tech is a student-led high-performance technology startup. Our mission is to "flip the script" on traditional tech support, replacing slow and impersonal services with high-velocity, specialist-led ecosystems.
 
-Frontend: Vanilla JavaScript, HTML5, CSS.
+---
 
-Visuals: WebGL/GLSL Fragment Shader,
+## 🏛 Architecture
+The codebase is split into a **Unified Full-Stack Repository** to optimize deployment performance and developer agility.
 
-Backend: Python (FastAPI Framework).
+### 🌐 [Frontend](frontend/)
+*   **Vanilla Stack**: Pure HTML5, CSS3, and JavaScript logic (no heavy frameworks).
+*   **Particle Engine**: Custom-built WebGL-canvas particle system with morphing "TECH" formations.
+*   **Responsive**: Fully optimized for Desktop and Mobile (Celeron-friendly).
 
-Database: PostgreSQL (Relational Data Integrity).
+### ⚙️ [Backend](backend/)
+*   **FastAPI**: Blazing fast Python backend for low-latency API responses.
+*   **SQLAlchemy 2.0**: High-abstraction relational mapping with automated schema migrations.
+*   **PostgreSQL**: Secure, persistent database for "The Vault" mission logging.
 
-Deployment: Vercel (Serverless Functions & Static Hosting).
+---
 
--Core Features
-The Mission Control (Admin Vault): A secure, whitelisted environment for administrators to manage service requests, track client phone numbers, and resolve tickets.
+## 🚀 Deployment
+Configured for seamless deployment on **Vercel** with a serverless server-side bridge.
 
-Identity-First Auth: A streamlined "Enter Environment" gateway that remembers users via PostgreSQL without unnecessary friction.
+1.  **Production**: [t-tech-xi.vercel.app](https://t-tech-xi.vercel.app)
+2.  **Database**: Vercel Managed PostgreSQL.
 
-The Service Bay: An 8-module grid featuring:
+---
 
-Hardware & Software Ops
+## 🛠 Developing Locally
+1.  **Clone the Mission**: `git clone https://github.com/smilee254/T-tech`
+2.  **Enter Environment**: `uvicorn backend.main:app --reload`
+3.  **Launch Dashboard**: Use any simple HTTP server in the `frontend/` directory.
 
-Web Development & Portfolios
+---
 
-Administrative Support (KRA Returns, CVs)
+## 🛡 Security & Whitelisting
+Access to the **Mission Control** admin bay and service submission is strictly restricted to whitelisted specialists. 
 
-WhatsApp Direct Connect: Integrated communication flow for real-time price quoting and resolution notifications.
+**Lead Operators:**
+*   Victor Kangacha (Tollar) - Founder
+*   Whis (Lewis) - Lead Specialist
+*   Patrick - Lead Specialist
+
+---
+*© 2024 Ʇ-Tech. All units operational.*
