@@ -15,11 +15,11 @@ ADMIN_WHITELIST = ["mwanglewis6@gmail.com", "patrickkimani1030@gmail.com"]
 ADMIN_SECRET_KEY = os.getenv("ADMIN_SECRET_KEY", "T-TECH-COMMAND-2024") # Set as env var or default for dev
 
 # --- 1. Database Connection Logic ---
-DATABASE_URL = os.getenv("POSTGRES_URL", "sqlite:///./test.db")
+DATABASE_URL = os.getenv("POSTGRES_URL", "sqlite:///./t-tech-main.db")
 
 # Vercel Serverless Fix: Ensure SQLite uses /tmp if not on Postgres
 if "sqlite" in DATABASE_URL and os.getenv("VERCEL"):
-    DATABASE_URL = "sqlite:////tmp/test.db"
+    DATABASE_URL = "sqlite:////tmp/t-tech-main.db"
 
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
