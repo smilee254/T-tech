@@ -4,100 +4,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ʇ-Tech | Master Build</title>
+    <title>Ʇ-Tech | Flip the Script</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <div class="bg-blobs">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
+    <div id="canvas-container">
+        <div class="prism-graphic"></div>
     </div>
 
-    <nav>
-        <a href="/" class="logo"><span class="flip">T</span>-Tech</a>
-        <div class="nav-links">
-            <a href="#" id="nav-login">Login</a>
-            <a href="#" id="nav-dashboard" class="hidden">Services</a>
-            <a href="/admin.html" id="nav-admin" class="hidden">Admin</a>
-            <a href="#" id="nav-logout" class="hidden">Logout</a>
+    <div class="hero-section">
+        <h1 class="prism-text"><span class="flip">T</span>-TECH</h1>
+        <p class="tagline">Where we flip the script on modern tech services to keep you moving forward.</p>
+    </div>
+
+    <div class="nav-grid">
+        <button class="nav-btn glass" onclick="window.location.href='about.html'">
+            <span>About Us</span>
+        </button>
+
+        <button class="nav-btn glass" onclick="window.location.href='why-us.html'">
+            <span>Why Us</span>
+        </button>
+
+        <button class="nav-btn glass" onclick="window.location.href='contact.html'">
+            <span>Contact Us</span>
+        </button>
+
+        <button class="nav-btn primary" onclick="window.location.href='login.html'">
+            <span>Enter Environment</span>
+        </button>
+    </div>
+
+    <footer class="contact-footer glass">
+        <div class="contact-item">
+            <strong>CALL:</strong> 0703146923 / 0759399204
         </div>
-    </nav>
-
-    <!-- Section 1: Landing -->
-    <section id="page-landing" class="hero">
-        <h1>Welcome to <span class="logo"><span class="flip">T</span>-Tech</span></h1>
-        <p>Where we flip the script on traditional tech support to keep you moving forward.</p>
-        <button id="get-started-btn" class="btn-primary">Get Started</button>
-    </section>
-
-    <!-- Section 2: Auth -->
-    <section id="page-auth" class="hidden">
-        <div class="glass-card">
-            <h2 id="auth-title" class="text-3xl font-black mb-4 uppercase text-center">Return to Eco</h2>
-            <p id="auth-subtitle"
-                class="text-xs text-gray-500 mb-8 border-b border-white/10 pb-4 text-center uppercase tracking-widest font-black">
-                Sign in to your ecosystem</p>
-
-            <form id="auth-form-el" class="space-y-6">
-                <div class="input-group">
-                    <label>Specialist Email</label>
-                    <input type="email" id="auth-email" class="form-control" placeholder="your@email.com" required>
-                </div>
-                <div class="input-group">
-                    <label>Security Secret</label>
-                    <input type="password" id="auth-password" class="form-control" placeholder="••••••••" required>
-                </div>
-                <button type="submit" id="auth-submit-btn" class="btn-primary" style="width: 100%">Sign In</button>
-            </form>
-
-            <div class="mt-8 text-center">
-                <a href="#" id="auth-toggle-btn"
-                    class="text-xs text-gray-400 hover:text-accent transition uppercase tracking-widest font-black">Actually,
-                    I need to Sign Up</a>
-            </div>
+        <div class="contact-item">
+            <strong>WHATSAPP:</strong> 0119787844
         </div>
-    </section>
-
-    <!-- Section 3: Services Hub -->
-    <section id="page-dashboard" class="hidden">
-        <div class="text-center mb-16">
-            <h2 class="text-5xl font-black uppercase mb-2">Service Hub</h2>
-            <p id="user-display" class="text-accent uppercase font-black text-xs tracking-widest">Client Status:
-                Verified</p>
-        </div>
-
-        <div class="service-grid">
-            <div class="service-card" data-service="Hardware">
-                <h3 class="text-xl font-bold mb-2">Hardware</h3>
-                <p class="text-sm text-gray-400">Repairs, upgrades, and custom builds.</p>
-            </div>
-            <div class="service-card" data-service="Software">
-                <h3 class="text-xl font-bold mb-2">Software</h3>
-                <p class="text-sm text-gray-400">Installation, troubleshooting, and OS.</p>
-            </div>
-            <div class="service-card" data-service="Web Development">
-                <h3 class="text-xl font-bold mb-2">Web Development</h3>
-                <p class="text-sm text-gray-400">E-commerce, portfolios, and tech UI.</p>
-            </div>
-            <div class="service-card" data-service="CV Development">
-                <h3 class="text-xl font-bold mb-2">CV Specialist</h3>
-                <p class="text-sm text-gray-400">Professional writing and digital refinement.</p>
-            </div>
-        </div>
-
-        <div id="issue-desc-container">
-            <div class="input-group">
-                <label>Issue Description or Requested Advancements</label>
-                <textarea id="issue-desc" class="form-control"
-                    placeholder="Describe what you need flipped in the ecosystem..."></textarea>
-            </div>
-            <button id="submit-request-btn" class="btn-primary">Submit to The Vault</button>
-        </div>
-    </section>
+    </footer>
 
     <script src="script.js"></script>
 </body>

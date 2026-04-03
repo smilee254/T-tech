@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Command Center Access | Ʇ-Tech</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .right-view {
+            background: #050005;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 5rem;
+            border-left: 2px solid #330033;
+        }
+
+        .entry-card {
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .entry-head {
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            font-size: 3.5rem;
+            color: #ff0055;
+            letter-spacing: 5px;
+            margin-bottom: 0.5rem;
+            line-height: 1.1;
+            text-shadow: 0 0 20px rgba(255, 0, 85, 0.3);
+        }
+
+        .entry-sub {
+            color: #888;
+            margin-bottom: 3rem;
+            letter-spacing: 1px;
+        }
+
+        .input-wrap input {
+            width: 100%;
+            background: rgba(255, 0, 85, 0.02);
+            border: 1px solid rgba(255, 0, 85, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            color: #fff;
+            transition: 0.3s;
+            font-size: 1rem;
+        }
+
+        .input-wrap input:focus {
+            border-color: #ff0055;
+            background: rgba(255, 0, 85, 0.05);
+            outline: none;
+        }
+
+        .glow-btn {
+            width: 100%;
+            padding: 20px;
+            border-radius: 15px;
+            border: none;
+            background: #ff0055;
+            color: #fff;
+            font-weight: 900;
+            cursor: pointer;
+            transition: 0.4s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .glow-btn:hover {
+            background: #ff3377;
+            box-shadow: 0 0 40px rgba(255, 0, 85, 0.4);
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="split-container">
+        <!-- Left Side -->
+        <div class="left-view">
+            <div id="canvas-container">
+                <div class="prism-graphic" style="background: linear-gradient(90deg, #ff0055, #7700ff);"></div>
+            </div>
+            <div style="position: absolute; bottom: 2rem; left: 2rem; z-index: 10;">
+                <h2 style="font-size: 2.5rem; font-weight: 900;"><span class="flip">T</span>-Tech</h2>
+                <p style="opacity: 0.5; letter-spacing: 2px;">COMMAND CENTER VERIFICATION</p>
+            </div>
+        </div>
+
+        <!-- Right Side -->
+        <div class="right-view">
+            <div class="entry-card">
+                <h1 class="entry-head">ADMIN COMMAND</h1>
+                <p class="entry-sub">Whitelisted Specialist Protocol Required.</p>
+
+                <form id="admin-gate-form">
+                    <p id="msg"></p>
+                    <div class="input-wrap">
+                        <input type="email" id="adminEmail" placeholder="Specialist Email" required>
+                    </div>
+                    <div class="input-wrap">
+                        <input type="password" id="adminPass" placeholder="Security Secret" required>
+                    </div>
+
+                    <button type="submit" class="glow-btn">AUTHORIZE ACCESS</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

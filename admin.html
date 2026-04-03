@@ -4,55 +4,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ʇ-Tech | Mission Control</title>
+    <title>Mission Control | Ʇ-Tech Admin</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        .admin-vault {
+            max-width: 1200px;
+            margin: 5vh auto;
+            padding: 3rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.05);
+            text-align: left;
+            padding: 1.5rem 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .status-pill.resolved {
+            background: rgba(37, 211, 102, 0.2);
+            color: #25D366;
+        }
+
+        .status-pill.pending {
+            background: rgba(232, 255, 71, 0.2);
+            color: var(--accent);
+        }
+    </style>
 </head>
 
 <body>
-    <div class="bg-blobs">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
+    <div id="canvas-container">
+        <div class="prism-graphic"></div>
     </div>
 
-    <nav>
-        <a href="/" class="logo"><span class="flip">T</span>-Tech</a>
-        <div class="nav-links">
-            <a href="/" id="nav-return">Return to Eco</a>
-            <a href="#" id="nav-logout-admin">Logout</a>
+    <nav class="glass"
+        style="padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border);">
+        <h2 style="font-weight: 900; letter-spacing: 5px;"><span class="flip">T</span>-Tech</h2>
+        <div style="display: flex; gap: 30px; align-items: center;">
+            <p style="opacity: 0.5; font-size: 0.8rem; letter-spacing: 1px;">MISSION CONTROL ACTIVE</p>
+            <a href="#" id="nav-logout"
+                style="color: #FF4444; text-decoration: none; font-weight: bold; font-size: 0.8rem;">PURGE SESSION</a>
         </div>
     </nav>
 
-    <section class="dashboard">
-        <div class="flex justify-between items-center mb-12 w-full max-w-7xl">
+    <div class="admin-vault content-container">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem;">
             <div>
-                <h2 class="text-4xl font-black uppercase mb-2">Mission Control</h2>
-                <p class="text-gray-500 font-bold uppercase text-[0.6rem] tracking-[0.3em]">Administrator Dashboard -
-                    Strict Access</p>
+                <h1 style="font-size: 3rem; font-weight: 900; letter-spacing: 10px;">THE VAULT</h1>
+                <p style="opacity: 0.5; letter-spacing: 2px;">REAL-TIME SERVICE REQUEST LEDGER</p>
             </div>
-            <button id="refresh-admin-btn" class="btn-primary">Sync All Records</button>
+            <div style="text-align: right;">
+                <span id="count" style="font-size: 3.5rem; font-weight: 900; color: var(--accent);">0</span>
+                <p style="opacity: 0.3; font-size: 0.7rem; margin-top: -10px;">ACTIVE MISSIONS</p>
+            </div>
         </div>
 
-        <div class="w-full max-w-7xl">
-            <table id="admin-requests-table" class="admin-table">
-                <thead>
-                    <tr>
-                        <th>Timestamp</th>
-                        <th>Specialist Email</th>
-                        <th>Service Type</th>
-                        <th>Description</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="admin-table-body">
-                    <!-- Populated by JS -->
-                </tbody>
-            </table>
-        </div>
-    </section>
+        <table>
+            <thead>
+                <tr>
+                    <th>Specialist Email</th>
+                    <th>Direct Phone</th>
+                    <th>Service Class</th>
+                    <th>Current Status</th>
+                    <th>Command Actions</th>
+                </tr>
+            </thead>
+            <tbody id="requestTableBody">
+                <!-- Injected via script.js -->
+            </tbody>
+        </table>
+    </div>
 
     <script src="script.js"></script>
 </body>

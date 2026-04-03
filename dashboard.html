@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Bay | Ʇ-Tech</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .page-header {
+            text-align: left;
+            margin-bottom: 3rem;
+            border-left: 4px solid var(--accent);
+            padding-left: 2rem;
+        }
+
+        .service-card .icon {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <nav
+        style="position: fixed; top: 0; width: 100%; padding: 2rem 5%; z-index: 100; display: flex; justify-content: space-between; align-items: center; background: rgba(5,5,5,0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--glass-border);">
+        <div class="logo"><span class="flip">T</span>-Tech Specialist</div>
+        <a href="#" id="nav-logout"
+            style="color: #fff; text-decoration: none; font-weight: 700; opacity: 0.5; transition: 0.3s;"
+            onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.5">Logout Ecosys</a>
+    </nav>
+
+    <div class="container">
+        <header class="page-header">
+            <h1 style="font-size: 4rem; font-weight: 900; margin-bottom: 0.5rem; letter-spacing: -2px;">Service Bay</h1>
+            <p style="opacity: 0.5; letter-spacing: 2px;">LOG MISSIONS TO THE VAULT</p>
+        </header>
+
+        <div class="service-grid">
+            <div class="service-card" data-service="Hardware">
+                <span class="icon">🛠</span>
+                <h3>Hardware</h3>
+                <p style="opacity: 0.5; font-size: 0.8rem;">Repairs & Custom Component Builds</p>
+            </div>
+            <div class="service-card" data-service="WebDev">
+                <span class="icon">⚡️</span>
+                <h3>WebDev</h3>
+                <p style="opacity: 0.5; font-size: 0.8rem;">High Performance Architecture</p>
+            </div>
+            <div class="service-card" data-service="KRA">
+                <span class="icon">📂</span>
+                <h3>KRA Returns</h3>
+                <p style="opacity: 0.5; font-size: 0.8rem;">Systemic Tax Compliance</p>
+            </div>
+            <div class="service-card" data-service="Software">
+                <span class="icon">💿</span>
+                <h3>Software Hub</h3>
+                <p style="opacity: 0.5; font-size: 0.8rem;">Troubleshooting & OS Deployment</p>
+            </div>
+            <div class="service-card" data-service="Graphics">
+                <span class="icon">🎨</span>
+                <h3>Graphics</h3>
+                <p style="opacity: 0.5; font-size: 0.8rem;">Branding & Visual Narrative</p>
+            </div>
+            <div class="service-card" data-service="Network">
+                <span class="icon">📡</span>
+                <h3>Networking</h3>
+                <p style="opacity: 0.5; font-size: 0.8rem;">Secure Infrastructure Layouts</p>
+            </div>
+            <div class="service-card" data-service="Data">
+                <span class="icon">💾</span>
+                <h3>Data Recovery</h3>
+                <p style="opacity: 0.5; font-size: 0.8rem;">Corrupt Sector Retrieval</p>
+            </div>
+            <div class="service-card" data-service="CV Writing">
+                <span class="icon">🖊</span>
+                <h3>CV Writing</h3>
+                <p style="opacity: 0.5; font-size: 0.8rem;">Professional Identity Design</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide-out Panel -->
+    <div id="side-panel" class="slide-panel">
+        <h2 id="selected-service-title" style="font-size: 2.5rem; font-weight: 900; margin-bottom: 2rem;">Selected</h2>
+        <div class="input-group">
+            <label>Mission Description</label>
+            <textarea id="issue-desc"
+                style="width: 100%; height: 200px; background: #111; border: 1px solid var(--glass-border); padding: 1.5rem; border-radius: 12px; color: #fff; font-family: inherit; font-size: 1rem;"
+                placeholder="Outline the technical parameters..."></textarea>
+        </div>
+        <button id="submit-request-btn" class="btn-primary" style="width: 100%; margin-top: 2rem;">
+            Commit to Vault
+        </button>
+        <button onclick="document.getElementById('side-panel').classList.remove('active')"
+            style="width: 100%; margin-top: 1rem; background: transparent; border: 1px solid var(--glass-border); color: #fff; padding: 1rem; border-radius: 12px; cursor: pointer; opacity: 0.5;">
+            Cancel Mission
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

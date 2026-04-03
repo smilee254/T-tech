@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Ʇ-Tech</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .back-link {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            opacity: 0.5;
+            transition: 0.3s;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+            transform: translateX(-5px);
+        }
+
+        .contact-vault {
+            max-width: 500px;
+            margin: 15vh auto;
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: 0.3s;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--accent);
+        }
+
+        .action-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #fff;
+            text-decoration: none;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 5px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .neon-link {
+            color: var(--accent);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="canvas-container">
+        <div class="prism-graphic"></div>
+    </div>
+
+    <a href="index.html" class="back-link">← BACK TO SYSTEM</a>
+
+    <div class="contact-vault glass green-glow">
+        <h1 class="content-header" style="font-size: 2rem;">DIRECT LINES</h1>
+        <p style="opacity: 0.5; margin-bottom: 2rem;">Connect with a whitelisted specialist instantly.</p>
+
+        <div class="contact-card">
+            <h3>Primary Support</h3>
+            <p style="margin: 10px 0; font-size: 1.1rem; letter-spacing: 1px;">0703146923 / 0759399204</p>
+            <a href="tel:0703146923" class="action-link">Call Specialist</a>
+        </div>
+
+        <div class="contact-card">
+            <h3>WhatsApp Gateway</h3>
+            <p style="margin: 10px 0; font-size: 1.1rem; letter-spacing: 1px;">0119787844</p>
+            <a href="https://wa.me/254119787844" class="action-link neon-link">Start Chat</a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

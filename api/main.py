@@ -1,168 +1,253 @@
-from fastapi import FastAPI, Depends, HTTPException, status, Header
+from fastapi import FastAPI, Header, Depends
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import create_engine, Column, Integer, String, Boolean, Text, ForeignKey, DateTime
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, Session, relationship
+from sqlalchemy.sql import func
 from pydantic import BaseModel, EmailStr
 from typing import List, Optional
-from datetime import datetime
 import os
-import psycopg2
-from psycopg2.extras import RealDictCursor
+from passlib.context import CryptContext
 
 # --- CONFIGURATION ---
 ADMIN_WHITELIST = ["mwanglewis6@gmail.com", "patrickkimani1030@gmail.com"]
-POSTGRES_URL = os.getenv("POSTGRES_URL", "postgresql://user:pass@localhost:5432/db")
+ADMIN_SECRET_KEY = os.getenv("ADMIN_SECRET_KEY", "T-TECH-COMMAND-2024") # Set as env var or default for dev
 
-app = FastAPI(title="Ʇ-Tech | Master Build API")
+# --- 1. Database Connection Logic ---
+DATABASE_URL = os.getenv("POSTGRES_URL", "sqlite:///./test.db")
 
-# CORS for local and Vercel
+# Vercel Serverless Fix: Ensure SQLite uses /tmp if not on Postgres
+if "sqlite" in DATABASE_URL and os.getenv("VERCEL"):
+    DATABASE_URL = "sqlite:////tmp/test.db"
+
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+# --- 2. Table 1: users (The Identity Vault) ---
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String(255), unique=True, index=True, nullable=False)
+    phone_number = Column(String(20), nullable=True) # Added for WhatsApp/Contact
+    password_hash = Column(String(255), nullable=False)
+    is_verified = Column(Boolean, default=False)
+    is_admin = Column(Boolean, default=False)
+    
+    requests = relationship("ServiceRequest", back_populates="owner")
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+# --- 3. Table 2: service_requests (The Mission Ledger) ---
+class ServiceRequest(Base):
+    __tablename__ = "service_requests"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    service_type = Column(String(50), nullable=False)
+    description = Column(Text, nullable=False)
+    status = Column(String(20), default="Pending")
+    created_at = Column(DateTime, server_default=func.now())
+
+    owner = relationship("User", back_populates="requests")
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+# --- 4. Core Functions ---
+def create_db():
+    Base.metadata.create_all(bind=engine)
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+async def submit_request(db: Session, user_id: int, service_type: str, description: str):
+    new_request = ServiceRequest(
+        user_id=user_id,
+        service_type=service_type,
+        description=description
+    )
+    db.add(new_request)
+    db.commit()
+    db.refresh(new_request)
+    return new_request
+
+def get_admin_view(db: Session):
+    return db.query(ServiceRequest, User).join(User, ServiceRequest.user_id == User.id).all()
+
+# --- FastAPI Implementation ---
+app = FastAPI(title="Ʇ-Tech | Professional Database & API")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:8000",
+        "https://t-tech.vercel.app",
+        "https://*.vercel.app" # Broad Vercel compatibility
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# --- DATABASE UTILS ---
-def get_db_connection():
-    try:
-        conn = psycopg2.connect(POSTGRES_URL, cursor_factory=RealDictCursor)
-        return conn
-    except Exception as e:
-        print(f"Postgres Connection Error: {e}")
-        raise HTTPException(status_code=500, detail="Database connectivity failure.")
-
-# Auto-provision tables on startup
 @app.on_event("startup")
-def startup():
-    conn = get_db_connection()
-    cur = conn.cursor()
-    
-    # Create Users
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id SERIAL PRIMARY KEY,
-            email TEXT UNIQUE NOT NULL,
-            password_hash TEXT NOT NULL,
-            is_verified BOOLEAN DEFAULT FALSE,
-            role TEXT DEFAULT 'client'
-        );
-    """)
-    
-    # Create Service Requests
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS service_requests (
-            id SERIAL PRIMARY KEY,
-            user_email TEXT NOT NULL,
-            service_type TEXT NOT NULL,
-            description TEXT NOT NULL,
-            status TEXT DEFAULT 'Pending',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-    """)
-    
-    conn.commit()
-    cur.close()
-    conn.close()
+def on_startup():
+    create_db()
 
-# --- SCHEMAS ---
-class UserAuth(BaseModel):
+# --- Schemas ---
+class AuthRequest(BaseModel):
     email: EmailStr
     password: str
+    phone_number: Optional[str] = None
 
-class ServiceRequest(BaseModel):
+class RequestCreate(BaseModel):
     email: str
     service_type: str
     description: str
 
-# --- AUTH ENDPOINTS ---
+# --- Helper for JSON Errors ---
+def error_response(message: str, status_code: int = 400):
+    return JSONResponse(status_code=status_code, content={"error": message})
+
+# --- Endpoints ---
+
+# --- Endpoints ---
+
 @app.get("/")
-async def root():
-    return {"message": "Welcome to Ʇ-Tech. Service requests are now online."}
+def root():
+    return {"message": "Ʇ-Tech Database is Online."}
 
-@app.post("/api/register")
-async def register(req: UserAuth):
-    conn = get_db_connection()
-    cur = conn.cursor()
-    try:
-        # Assign role based on whitelist
-        role = "admin" if req.email in ADMIN_WHITELIST else "client"
-        cur.execute(
-            "INSERT INTO users (email, password_hash, role) VALUES (%s, %s, %s)",
-            (req.email, req.password, role) # Simple password storage for demo
+@app.post("/api/auth/public")
+async def public_auth(req: AuthRequest, db: Session = Depends(get_db)):
+    # 1. Check if user exists
+    db_user = db.query(User).filter(User.email == req.email).first()
+    
+    if db_user:
+        # Verify Password
+        if not pwd_context.verify(req.password, db_user.password_hash):
+            return error_response("Password Invalid.", 401)
+        
+        return {
+            "redirect": "/dashboard.html",
+            "email": db_user.email,
+            "is_admin": db_user.is_admin
+        }
+    else:
+        # JOIN THE MISSION (Auto-Register)
+        if not req.phone_number:
+            return error_response("Phone Number required for new specialists.", 400)
+            
+        hashed_password = pwd_context.hash(req.password)
+        new_user = User(
+            email=req.email,
+            phone_number=req.phone_number,
+            password_hash=hashed_password,
+            is_admin=req.email in ADMIN_WHITELIST,
+            is_verified=req.email in ADMIN_WHITELIST
         )
-        conn.commit()
-        return {"message": f"Specialist registered as {role}. Redirecting to eco..."}
-    except Exception as e:
-        conn.rollback()
-        raise HTTPException(status_code=400, detail="Registration failed. specialist account exists.")
-    finally:
-        cur.close()
-        conn.close()
+        
+        db.add(new_user)
+        db.commit()
+        
+        return {
+            "redirect": "/dashboard.html",
+            "email": new_user.email,
+            "is_admin": new_user.is_admin
+        }
 
-@app.post("/api/login")
-async def login(req: UserAuth):
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM users WHERE email = %s AND password_hash = %s", (req.email, req.password))
-    user = cur.fetchone()
-    cur.close()
-    conn.close()
-    
-    if not user:
-        raise HTTPException(status_code=401, detail="Security Secret Invalid.")
-    
-    # Check if verified (default true for demo to avoid email auth blockage)
-    if not user['is_verified'] and user['email'] not in ADMIN_WHITELIST:
-         return {"verified": False, "email": user['email']}
-
+@app.post("/api/auth/admin")
+async def admin_auth(req: AuthRequest, db: Session = Depends(get_db)):
+    # Strict Whitelist Check
+    if req.email not in ADMIN_WHITELIST:
+        return error_response("Access Denied: Not a Whitelisted Specialist.", 403)
+        
+    # Verify Secret Key
+    if req.password != ADMIN_SECRET_KEY:
+        return error_response("Specialist Secret Key Invalid.", 401)
+        
     return {
-        "verified": True,
-        "is_admin": user['role'] == "admin",
-        "email": user['email']
+        "redirect": "/admin.html",
+        "email": req.email,
+        "is_admin": True
     }
 
-@app.post("/api/verify")
-async def verify(email: str):
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute("UPDATE users SET is_verified = TRUE WHERE email = %s", (email,))
-    conn.commit()
-    cur.close()
-    conn.close()
-    return {"message": "Email Verified. Specialist permissions granted."}
-
-# --- SERVICE ENDPOINTS ---
 @app.post("/api/submit")
-async def submit_request(req: ServiceRequest):
-    conn = get_db_connection()
-    cur = conn.cursor()
+async def api_submit_request(req: RequestCreate, db: Session = Depends(get_db)):
+    db_user = db.query(User).filter(User.email == req.email).first()
+    if not db_user:
+        return error_response("User not found.", 404)
     
-    # Check verification status first
-    cur.execute("SELECT is_verified FROM users WHERE email = %s", (req.email,))
-    user = cur.fetchone()
-    if not user or not user['is_verified']:
-        cur.close()
-        conn.close()
-        raise HTTPException(status_code=403, detail="Verification Required to access The Vault.")
+    if not db_user.is_verified and not db_user.is_admin:
+        return error_response("Verification Required to access The Vault.", 403)
     
-    cur.execute(
-        "INSERT INTO service_requests (user_email, service_type, description) VALUES (%s, %s, %s)",
-        (req.email, req.service_type, req.description)
-    )
-    conn.commit()
-    cur.close()
-    conn.close()
+    await submit_request(db, db_user.id, req.service_type, req.description)
     return {"message": "Logged in The Vault. Specialist has been notified."}
 
 @app.get("/api/admin/requests")
-async def get_admin_data(admin_email: Optional[str] = Header(None)):
+async def admin_requests(admin_email: Optional[str] = Header(None), db: Session = Depends(get_db)):
     if admin_email not in ADMIN_WHITELIST:
-        raise HTTPException(status_code=403, detail="Admin authorization failed.")
+        return error_response("Admin authorization failed.", 403)
     
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM service_requests ORDER BY created_at DESC")
-    requests = cur.fetchall()
-    cur.close()
-    conn.close()
-    return requests
+    # JOIN ServiceRequest with User to get phone_number
+    results = db.query(ServiceRequest, User).join(User, ServiceRequest.user_id == User.id).all()
+    
+    output = []
+    for req, user in results:
+        output.append({
+            "id": req.id,
+            "user_email": user.email,
+            "phone_number": user.phone_number,
+            "service_type": req.service_type,
+            "description": req.description,
+            "status": req.status,
+            "created_at": str(req.created_at)
+        })
+    return output
+
+@app.patch("/api/admin/resolve/{request_id}")
+async def resolve_request(request_id: int, admin_email: Optional[str] = Header(None), db: Session = Depends(get_db)):
+    if admin_email not in ADMIN_WHITELIST:
+        return error_response("Unauthorized", 403)
+    
+    req = db.query(ServiceRequest).filter(ServiceRequest.id == request_id).first()
+    if not req:
+        return error_response("Request not found", 404)
+    
+    req.status = "Resolved"
+    db.commit()
+    return {"message": "Request marked as Resolved"}
+
+@app.delete("/api/admin/delete/{request_id}")
+async def delete_request(request_id: int, admin_email: Optional[str] = Header(None), db: Session = Depends(get_db)):
+    if admin_email not in ADMIN_WHITELIST:
+        return error_response("Unauthorized", 403)
+    
+    req = db.query(ServiceRequest).filter(ServiceRequest.id == request_id).first()
+    if not req:
+        return error_response("Request not found", 404)
+    
+    db.delete(req)
+    db.commit()
+    return {"message": "Request purged from Vault"}
+
+@app.post("/api/verify")
+async def verify(email: str, db: Session = Depends(get_db)):
+    db_user = db.query(User).filter(User.email == email).first()
+    if not db_user:
+        return error_response("User not found.", 404)
+    
+    db_user.is_verified = True
+    db.commit()
+    return {"message": "Email Verified. Specialist permissions granted."}

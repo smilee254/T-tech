@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Vault | Ʇ-Tech</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .right-view {
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 5rem;
+        }
+
+        .entry-card {
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .entry-head {
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            font-size: 3.5rem;
+            color: #fff;
+            letter-spacing: 5px;
+            margin-bottom: 0.5rem;
+            line-height: 1.1;
+        }
+
+        .entry-sub {
+            color: #888;
+            margin-bottom: 3rem;
+            letter-spacing: 1px;
+        }
+
+        .input-wrap {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .input-wrap input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            color: #fff;
+            transition: 0.3s;
+            font-size: 1rem;
+        }
+
+        .input-wrap input:focus {
+            border-color: #e8ff47;
+            background: rgba(232, 255, 71, 0.05);
+            outline: none;
+        }
+
+        .glow-btn {
+            width: 100%;
+            padding: 20px;
+            border-radius: 15px;
+            border: none;
+            background: #fff;
+            color: #000;
+            font-weight: 900;
+            cursor: pointer;
+            transition: 0.4s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .glow-btn:hover {
+            background: #e8ff47;
+            box-shadow: 0 0 30px rgba(232, 255, 71, 0.3);
+            transform: scale(1.02);
+        }
+
+        .auth-footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #555;
+            letter-spacing: 1px;
+        }
+
+        #msg {
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="split-container">
+        <!-- Left Side (Visual Branding) -->
+        <div class="left-view">
+            <div id="canvas-container">
+                <div class="prism-graphic"></div>
+            </div>
+            <div style="position: absolute; bottom: 2rem; left: 2rem; z-index: 10;">
+                <h2 style="font-size: 2.5rem; font-weight: 900;"><span class="flip">T</span>-Tech</h2>
+                <p style="opacity: 0.5; letter-spacing: 2px;">SPECIALIST ECOSYSTEM</p>
+            </div>
+        </div>
+
+        <!-- Right Side (The Gateway) -->
+        <div class="right-view">
+            <div class="entry-card">
+                <h1 class="entry-head">ENTER ENVIRONMENT</h1>
+                <p class="entry-sub">Identify yourself to access the Service Bay.</p>
+
+                <form id="auth-gate">
+                    <p id="msg"></p>
+                    <div class="input-wrap">
+                        <input type="email" id="userEmail" placeholder="Email Address" required>
+                    </div>
+                    <div class="input-wrap">
+                        <input type="tel" id="userPhone" placeholder="Phone Number (e.g., 07...)" required>
+                    </div>
+                    <div class="input-wrap">
+                        <input type="password" id="userPass" placeholder="Enter / Create Password" required>
+                    </div>
+
+                    <button type="submit" class="glow-btn">INITIALIZE ACCESS</button>
+                </form>
+
+                <div class="auth-footer">
+                    <p>New Specialist? Your account will be created automatically.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
