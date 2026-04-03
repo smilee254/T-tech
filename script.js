@@ -15,7 +15,14 @@ const handleAuth = async (endpoint, payload, msgElem, btnElem) => {
             body: JSON.stringify(payload)
         });
 
-        const data = await res.json();
+        let data;
+        const text = await res.text();
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            throw new Error(`Deployment Crash: ${text.substring(0, 50)}...`);
+        }
+
         if (!res.ok) throw new Error(data.error || data.detail || "Access Denied");
 
         localStorage.setItem('user_email', data.email);

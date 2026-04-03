@@ -90,17 +90,24 @@ app = FastAPI(title="Ʇ-Tech | Professional Database & API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://localhost:8000",
-        "https://t-tech.vercel.app",
-        "https://*.vercel.app" # Broad Vercel compatibility
-    ],
+    allow_origins=["*"], # Open for deployment diagnostics
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+import traceback
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": "Mission Control Crash",
+            "details": str(exc),
+            "traceback": traceback.format_exc()
+        }
+    )
 
 @app.on_event("startup")
 def on_startup():
