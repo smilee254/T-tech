@@ -6,6 +6,6 @@ email-validator
 python-multipart
 pyjwt
 passlib[bcrypt]
-bcrypt
+bcrypt==3.2.0
 sqlalchemy
 requests
