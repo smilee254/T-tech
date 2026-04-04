@@ -13,7 +13,13 @@ from passlib.context import CryptContext
 
 # --- CONFIGURATION ---
 ADMIN_WHITELIST = ["mwanglewis6@gmail.com", "patrickkimani1030@gmail.com"]
-ADMIN_SECRET_KEY = os.getenv("ADMIN_SECRET_KEY", "T-TECH-COMMAND-2024")
+ADMIN_SECRET_KEY = os.getenv("ADMIN_SECRET_KEY") or "T-TECH-COMMAND-2024"
+
+def is_whitelisted(email: str) -> bool:
+    if not email:
+        return False
+    return email.strip().lower() in [e.strip().lower() for e in ADMIN_WHITELIST]
+
 
 # --- 1. Database Connection Logic ---
 DATABASE_URL = os.getenv("POSTGRES_URL", "sqlite:///./t-tech-main.db")
@@ -153,11 +159,17 @@ async def public_auth(req: AuthRequest, db: Session = Depends(get_db)):
         if not pwd_context.verify(req.password, db_user.password_hash):
             return error_response("Password Invalid.", 401)
         
+        # Sync admin/verification status from whitelist in case it changed
+        db_user.is_admin = is_whitelisted(db_user.email)
+        db_user.is_verified = is_whitelisted(db_user.email) or db_user.is_verified
+        db.commit()
+        
         return {
             "redirect": "/dashboard.html",
             "email": db_user.email,
             "is_admin": db_user.is_admin
         }
+
     else:
         if not req.phone_number:
             return error_response("Phone Number required for new specialists.", 400)
@@ -167,8 +179,9 @@ async def public_auth(req: AuthRequest, db: Session = Depends(get_db)):
             email=req.email,
             phone_number=req.phone_number,
             password_hash=hashed_password,
-            is_admin=req.email in ADMIN_WHITELIST,
-            is_verified=req.email in ADMIN_WHITELIST
+            is_admin=is_whitelisted(req.email),
+            is_verified=is_whitelisted(req.email)
+
         )
         
         db.add(new_user)
@@ -182,17 +195,18 @@ async def public_auth(req: AuthRequest, db: Session = Depends(get_db)):
 
 @app.post("/api/auth/admin")
 async def admin_auth(req: AuthRequest, db: Session = Depends(get_db)):
-    if req.email not in ADMIN_WHITELIST:
-        return error_response("Access Denied.", 403)
+    if not is_whitelisted(req.email):
+        return error_response("Access Denied. You are not on the Mission Control Whitelist.", 403)
         
     if req.password != ADMIN_SECRET_KEY:
-        return error_response("Secret Key Invalid.", 401)
+        return error_response("Security Secret Invalid.", 401)
         
     return {
         "redirect": "/admin.html",
-        "email": req.email,
+        "email": req.email.strip().lower(),
         "is_admin": True
     }
+
 
 @app.post("/api/submit")
 async def api_submit_request(req: RequestCreate, db: Session = Depends(get_db)):
@@ -214,8 +228,9 @@ async def api_submit_request(req: RequestCreate, db: Session = Depends(get_db)):
 
 @app.get("/api/admin/requests")
 async def admin_requests(admin_email: Optional[str] = Header(None), db: Session = Depends(get_db)):
-    if admin_email not in ADMIN_WHITELIST:
-        return error_response("Auth Failed.", 403)
+    if not is_whitelisted(admin_email):
+        return error_response("Auth Failed. Whitelist required.", 403)
+
     
     results = db.query(ServiceRequest, User).join(User, ServiceRequest.user_id == User.id).all()
     output = []
@@ -233,8 +248,9 @@ async def admin_requests(admin_email: Optional[str] = Header(None), db: Session 
 
 @app.patch("/api/admin/resolve/{request_id}")
 async def resolve_request(request_id: int, admin_email: Optional[str] = Header(None), db: Session = Depends(get_db)):
-    if admin_email not in ADMIN_WHITELIST:
+    if not is_whitelisted(admin_email):
         return error_response("Unauthorized", 403)
+
     
     req = db.query(ServiceRequest).filter(ServiceRequest.id == request_id).first()
     if not req:
@@ -246,8 +262,9 @@ async def resolve_request(request_id: int, admin_email: Optional[str] = Header(N
 
 @app.delete("/api/admin/delete/{request_id}")
 async def delete_request(request_id: int, admin_email: Optional[str] = Header(None), db: Session = Depends(get_db)):
-    if admin_email not in ADMIN_WHITELIST:
+    if not is_whitelisted(admin_email):
         return error_response("Unauthorized", 403)
+
     
     req = db.query(ServiceRequest).filter(ServiceRequest.id == request_id).first()
     if not req:

@@ -185,6 +185,9 @@ if (requestTableBody) {
                         <a href="tel:${req.phone_number}" style="color: #fff; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.2);">${req.phone_number}</a>
                     </td>
                     <td style="padding: 1rem; border-bottom: 1px solid var(--glass-border); color: var(--accent); font-weight: 700;">${req.service_type}</td>
+                    <td style="padding: 1rem; border-bottom: 1px solid var(--glass-border); max-width: 300px; font-size: 0.8rem; line-height: 1.4; opacity: 0.8;">
+                        ${req.description}
+                    </td>
                     <td style="padding: 1rem; border-bottom: 1px solid var(--glass-border);">
                         <span class="status-pill ${req.status.toLowerCase()}" style="padding: 5px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 700;">${req.status}</span>
                     </td>
@@ -196,6 +199,7 @@ if (requestTableBody) {
                         </div>
                     </td>
                 `;
+
                 requestTableBody.appendChild(tr);
             });
         } catch (err) { console.error(err); }
