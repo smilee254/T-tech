@@ -200,8 +200,8 @@ async def api_submit_request(req: RequestCreate, db: Session = Depends(get_db)):
     if not db_user:
         return error_response("User not found.", 404)
     
-    if not db_user.is_verified and not db_user.is_admin:
-        return error_response("Verification Required.", 403)
+    # No verification check required for vault submission as per user request
+
     
     new_request = ServiceRequest(
         user_id=db_user.id,
