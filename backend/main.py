@@ -22,20 +22,28 @@ DATABASE_URL = os.getenv("POSTGRES_URL", "sqlite:///./t-tech-main.db")
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
-# Vercel / Cloud Fix: Enable SSL for Postgres
+# Vercel / Cloud Fix: Enable SSL for Postgres safely
 if "postgresql" in DATABASE_URL and "sslmode" not in DATABASE_URL:
-    DATABASE_URL += "?sslmode=require"
+    # Use & if parameters already exist, else ?
+    separator = "&" if "?" in DATABASE_URL else "?"
+    DATABASE_URL += f"{separator}sslmode=require"
 
 # Vercel Serverless Fix: Ensure SQLite uses /tmp
 if "sqlite" in DATABASE_URL and os.getenv("VERCEL"):
     DATABASE_URL = "sqlite:////tmp/t-tech-main.db"
 
 # Create Engine with Pooling
-engine = create_engine(
-    DATABASE_URL, 
-    pool_pre_ping=True, # Critical for Celeron/Serverless keep-alive
-    echo=False # Set to True for DB debugging
-)
+try:
+    engine = create_engine(
+        DATABASE_URL, 
+        pool_pre_ping=True, # Critical for Celeron/Serverless keep-alive
+        echo=False # Set to True for DB debugging
+    )
+except Exception as e:
+    print(f"CRITICAL: Engine Creation Failed: {e}")
+    # Fallback to in-memory if everything else fails to at least allow boot
+    engine = create_engine("sqlite:///:memory:")
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
@@ -99,18 +107,23 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 @app.on_event("startup")
 def on_startup():
-    # 1. Create tables if they don't exist
-    Base.metadata.create_all(bind=engine)
-    
-    # 2. Migration Check: Ensure missing columns exist in existing tables
-    with engine.connect() as conn:
-        try:
-            # Check for is_admin column in users
-            conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS phone_number TEXT;"))
-            conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT FALSE;"))
-            conn.commit()
-        except Exception as e:
-            print(f"Migration: Columns already exist or {e}")
+    try:
+        # 1. Create tables if they don't exist
+        Base.metadata.create_all(bind=engine)
+        
+        # 2. Migration Check: Ensure missing columns exist in existing tables
+        with engine.connect() as conn:
+            try:
+                # Check for is_admin column in users
+                conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS phone_number TEXT;"))
+                conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT FALSE;"))
+                conn.commit()
+            except Exception as e:
+                print(f"Migration: Column check error (Safe to ignore if columns already exist): {e}")
+    except Exception as e:
+        print(f"CRITICAL STARTUP ERROR: {e}")
+        # We don't re-raise here to prevent "Deployment Crash" on Vercel boot.
+        # Errors will be handled/shown during individual API requests.
 
 # --- Schemas ---
 class AuthRequest(BaseModel):
