@@ -168,7 +168,7 @@
       <p class="login-sub">Identify yourself to access the Service Bay.</p>
     </div>
     
-    <form id="auth-gate" onsubmit="event.preventDefault(); alert('Environment Access Initiated');">
+    <form id="auth-gate" onsubmit="handleLogin(event)">
       <div class="form-group">
         <label for="userEmail">Email Address</label>
         <input type="email" id="userEmail" class="form-control" placeholder="specialist@t-tech.com" required>
@@ -190,5 +190,23 @@
     <a href="index.html" class="back-link">← Back to System</a>
   </div>
 
+  <script>
+    function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('userEmail').value.trim().toLowerCase();
+      
+      // Admin whitelisted emails
+      const admins = ['smilee@t-tech.com', 'pato@t-tech.com', 'tollar@t-tech.com', 'admin@t-tech.com'];
+      
+      // Store current user in localStorage to simulate session
+      localStorage.setItem('ttech_current_user', email);
+      
+      if (admins.includes(email)) {
+        window.location.href = 'admin.html';
+      } else {
+        window.location.href = 'dashboard.html';
+      }
+    }
+  </script>
 </body>
 </html>

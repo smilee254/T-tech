@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>T-Tech | Service Bay</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #05060a;
+      --bg2: #0b0d12;
+      --panel: #0a192f;
+      --border: rgba(232, 255, 71, 0.2);
+      --accent: #e8ff47;
+      --accent-hover: #d4ed35;
+      --text: #fff;
+      --text-muted: #9ca3af;
+      --font-h: 'Montserrat', sans-serif;
+      --font-b: 'Inter', sans-serif;
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-b);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Navbar */
+    .navbar {
+      background-color: rgba(5, 6, 10, 0.95);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .nav-logo {
+      font-family: var(--font-h);
+      font-weight: 900;
+      font-size: 1.5rem;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+    }
+    
+    .nav-logo span { color: var(--accent); }
+    
+    .nav-user {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .logout-btn {
+      background: none;
+      border: 1px solid var(--text-muted);
+      color: var(--text-muted);
+      padding: 0.4rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: 0.2s;
+    }
+    
+    .logout-btn:hover {
+      border-color: var(--text);
+      color: var(--text);
+    }
+    
+    /* Main Content */
+    .container {
+      flex: 1;
+      max-width: 800px;
+      margin: 3rem auto;
+      width: 100%;
+      padding: 0 2rem;
+    }
+    
+    .header {
+      margin-bottom: 2rem;
+    }
+    
+    .title {
+      font-family: var(--font-h);
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    
+    /* Form Panel */
+    .panel {
+      background-color: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    
+    input, select, textarea {
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      padding: 1rem;
+      border-radius: 4px;
+      font-family: var(--font-b);
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+    }
+    
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+    
+    .submit-btn {
+      background-color: var(--accent);
+      color: #000;
+      border: none;
+      padding: 1rem 2rem;
+      font-family: var(--font-h);
+      font-weight: 800;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      transition: 0.2s;
+    }
+    
+    .submit-btn:hover {
+      background-color: var(--accent-hover);
+    }
+    
+    /* Success Message */
+    .success-msg {
+      display: none;
+      background-color: rgba(232, 255, 71, 0.1);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 1rem;
+      border-radius: 4px;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo"><span>T</span>-TECH</a>
+    <div class="nav-user">
+      <span id="userDisplay">Loading...</span>
+      <button class="logout-btn" onclick="logout()">Disconnect</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="header">
+      <h1 class="title">Service Bay</h1>
+      <p class="subtitle">Submit a new tech support or installation request to our specialists.</p>
+    </div>
+
+    <div class="success-msg" id="successMsg">Request submitted successfully! A specialist will contact you shortly.</div>
+
+    <div class="panel">
+      <form id="requestForm" onsubmit="submitRequest(event)">
+        <div class="form-group">
+          <label>Request Type</label>
+          <select id="reqType" required>
+            <option value="" disabled selected>Select a category</option>
+            <option value="Technical Support">Technical Support</option>
+            <option value="Security Installation">Security Installation</option>
+            <option value="System Maintenance">System Maintenance</option>
+            <option value="Consultation">Consultation / Survey</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Urgency Level</label>
+          <select id="reqUrgency" required>
+            <option value="Normal">Normal (24-48 hours)</option>
+            <option value="High">High (Same Day)</option>
+            <option value="Critical">Critical (Immediate Response)</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Description of Issue / Need</label>
+          <textarea id="reqDesc" placeholder="Please provide details about your request..." required></textarea>
+        </div>
+        
+        <button type="submit" class="submit-btn">Submit Request</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Authentication Check
+    const currentUser = localStorage.getItem('ttech_current_user');
+    if (!currentUser) {
+      window.location.href = 'login.html';
+    } else {
+      document.getElementById('userDisplay').textContent = currentUser;
+    }
+    
+    // Admins shouldn't be here (ideally)
+    const admins = ['smilee@t-tech.com', 'pato@t-tech.com', 'tollar@t-tech.com', 'admin@t-tech.com'];
+    if (admins.includes(currentUser)) {
+      window.location.href = 'admin.html';
+    }
+
+    function logout() {
+      localStorage.removeItem('ttech_current_user');
+      window.location.href = 'login.html';
+    }
+
+    function submitRequest(e) {
+      e.preventDefault();
+      
+      const type = document.getElementById('reqType').value;
+      const urgency = document.getElementById('reqUrgency').value;
+      const desc = document.getElementById('reqDesc').value;
+      
+      const requestData = {
+        id: 'REQ-' + Math.floor(Math.random() * 10000),
+        user: currentUser,
+        type: type,
+        urgency: urgency,
+        desc: desc,
+        date: new Date().toLocaleString(),
+        status: 'Pending'
+      };
+      
+      // Save to localStorage
+      let requests = JSON.parse(localStorage.getItem('ttech_requests')) || [];
+      requests.push(requestData);
+      localStorage.setItem('ttech_requests', JSON.stringify(requests));
+      
+      // Show success message and reset form
+      document.getElementById('successMsg').style.display = 'block';
+      document.getElementById('requestForm').reset();
+      
+      setTimeout(() => {
+        document.getElementById('successMsg').style.display = 'none';
+      }, 5000);
+    }
+  </script>
+</body>
+</html>
