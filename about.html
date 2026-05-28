@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About Us | T-Tech</title>
-  <meta name="description" content="The student-led tech powerhouse behind T-Tech. Meet our founders and lead operators.">
+  <meta name="description" content="The student-led tech powerhouse behind T-Tech. Meet our founders, lead operators, and discover every service we offer.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
       --bg:#05060a;--bg2:#0b0d12;--border:rgba(255,255,255,0.08);
-      --accent:#e8ff47;--red:#e8ff47;--white:#fff;--grey:#6b7280;--grey-lt:#9ca3af;
+      --accent:#e8ff47;--white:#fff;--grey:#6b7280;--grey-lt:#9ca3af;
       --font-h:'Montserrat',sans-serif;--font-b:'Inter',sans-serif
     }
     html{scroll-behavior:smooth}
@@ -33,22 +33,14 @@
     .about-hero{
       min-height:100vh;display:flex;align-items:center;justify-content:center;
       position:relative;overflow:hidden;padding:8rem 5% 5rem;text-align:center;
-      background-image: url('assets/tech_bg.png');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
+      background-image:url('assets/tech_bg.png');
+      background-size:cover;background-position:center;background-attachment:fixed;
     }
-    
-    .about-hero::before{
-      content:'';position:absolute;inset:0;
-      background:rgba(5,6,10,0.85);
-    }
-    
-    /* Fade gradient overlay */
+    .about-hero::before{content:'';position:absolute;inset:0;background:rgba(5,6,10,0.88)}
     .about-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 50% 50%,transparent 0%,var(--bg) 75%)}
     .orb-hero{position:absolute;border-radius:50%;pointer-events:none}
-    .orb-1{top:-200px;left:-200px;width:700px;height:700px;background:radial-gradient(circle,rgba(232,255,71,0.12) 0%,transparent 70%);animation:pulse 10s ease-in-out infinite alternate}
-    .orb-2{bottom:-150px;right:-100px;width:550px;height:550px;background:radial-gradient(circle,rgba(232,255,71,0.06) 0%,transparent 70%);animation:pulse 14s ease-in-out infinite alternate-reverse}
+    .orb-1{top:-200px;left:-200px;width:700px;height:700px;background:radial-gradient(circle,rgba(232,255,71,0.1) 0%,transparent 70%);animation:pulse 10s ease-in-out infinite alternate}
+    .orb-2{bottom:-150px;right:-100px;width:550px;height:550px;background:radial-gradient(circle,rgba(232,255,71,0.05) 0%,transparent 70%);animation:pulse 14s ease-in-out infinite alternate-reverse}
     @keyframes pulse{from{transform:scale(1)}to{transform:scale(1.12)}}
     .hero-inner{position:relative;z-index:1;max-width:800px}
     .eyebrow{font-size:.7rem;font-weight:600;letter-spacing:.5em;text-transform:uppercase;color:var(--accent);margin-bottom:1.5rem}
@@ -56,13 +48,27 @@
     .hero-h1 .flip{display:inline-block;transform:scaleX(-1);color:var(--accent)}
     .hero-desc{font-size:clamp(.95rem,1.4vw,1.15rem);color:var(--grey-lt);line-height:1.8;max-width:620px;margin:0 auto}
 
-    /* ── STORY SECTION ── */
+    /* ── SECTIONS ── */
     .section{padding:6rem 5%}
     .section-inner{max-width:1100px;margin:0 auto}
     .section-label{font-size:.68rem;font-weight:700;letter-spacing:.5em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
     .section-h2{font-family:var(--font-h);font-size:clamp(2rem,4vw,3.2rem);font-weight:900;line-height:1.1;margin-bottom:2rem}
-    .section-body{font-size:.95rem;color:var(--grey-lt);line-height:1.85;max-width:660px}
-    .section-body p+p{margin-top:1.1rem}
+    .section-body{font-size:.95rem;color:var(--grey-lt);line-height:1.85;max-width:680px}
+    .section-body p+p{margin-top:1.2rem}
+    .section-body strong{color:var(--white)}
+
+    /* ── SERVICES GRID ── */
+    .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;margin-top:3rem}
+    .service-card{
+      background:var(--bg2);border:1px solid var(--border);border-radius:16px;
+      padding:2rem 1.5rem;text-align:center;transition:.3s;cursor:default;
+      position:relative;overflow:hidden;
+    }
+    .service-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(232,255,71,0.05),transparent);opacity:0;transition:.3s}
+    .service-card:hover{border-color:rgba(232,255,71,0.4);transform:translateY(-5px)}
+    .service-card:hover::before{opacity:1}
+    .service-icon{font-size:2.4rem;margin-bottom:1rem}
+    .service-name{font-family:var(--font-h);font-weight:700;font-size:.9rem;letter-spacing:.05em;text-transform:uppercase;color:var(--white)}
 
     /* ── TEAM GRID ── */
     .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2rem;margin-top:3rem}
@@ -82,20 +88,23 @@
     .why-title{font-family:var(--font-h);font-weight:700;font-size:.95rem;margin-bottom:.5rem}
     .why-desc{font-size:.82rem;color:var(--grey);line-height:1.65}
 
-    /* ── CTA FOOTER STRIP ── */
+    /* ── CTA STRIP ── */
     .cta-strip{background:var(--bg2);border-top:1px solid var(--border);padding:5rem 5%;text-align:center}
     .cta-strip h2{font-family:var(--font-h);font-weight:900;font-size:clamp(1.8rem,3.5vw,2.8rem);margin-bottom:1rem}
     .cta-strip p{color:var(--grey-lt);font-size:.92rem;margin-bottom:2rem}
-    .cta-btn{display:inline-flex;align-items:center;gap:.6rem;background:var(--white);color:#000;font-family:var(--font-h);font-weight:900;font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;padding:1rem 2.2rem;border-radius:6px;transition:.3s}
-    .cta-btn:hover{background:var(--accent);box-shadow:0 0 28px rgba(232,255,71,.22)}
+    .cta-btn{display:inline-flex;align-items:center;gap:.6rem;background:var(--accent);color:#000;font-family:var(--font-h);font-weight:900;font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;padding:1rem 2.2rem;border-radius:6px;transition:.3s}
+    .cta-btn:hover{background:var(--white);box-shadow:0 0 28px rgba(232,255,71,.22)}
     .cta-ghost{display:inline-flex;align-items:center;margin-left:1rem;color:var(--grey-lt);font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:2px;transition:.2s}
     .cta-ghost:hover{color:var(--white);border-color:var(--white)}
 
-    /* ── BOTTOM NAV ── */
+    /* ── FOOTER ── */
     footer{padding:2rem 5%;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);font-size:.75rem;color:var(--grey)}
     footer a{color:var(--grey-lt);text-decoration:none}
     footer a:hover{color:var(--white)}
     @media(max-width:600px){footer{flex-direction:column;gap:.8rem;text-align:center}}
+
+    /* ── DIVIDER ── */
+    .section-divider{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:0 5%}
   </style>
 </head>
 <body>
@@ -104,7 +113,7 @@
   <nav id="nav">
     <a href="index.html" class="nav-logo"><span>T</span>-TECH</a>
     <div class="nav-links">
-      <a href="index.html#about" class="nav-link">About</a>
+      <a href="index.html" class="nav-link">Home</a>
       <a href="index.html#why-us" class="nav-link">Why Us</a>
       <a href="index.html#contact" class="nav-link">Contact</a>
     </div>
@@ -119,7 +128,7 @@
       <div class="eyebrow">Who We Are</div>
       <h1 class="hero-h1">The Student&#8209;Led<br><span class="flip">T</span>ech Powerhouse.</h1>
       <p class="hero-desc">
-        We flip the script on modern tech services — merging technical mastery with specialist-led tech support to keep you moving forward.
+        We flip the script on modern tech services — merging technical mastery with specialist-led support to keep you and your systems moving forward.
       </p>
     </div>
   </section>
@@ -131,26 +140,65 @@
       <h2 class="section-h2">Born from a vision<br>to challenge the status quo.</h2>
       <div class="section-body">
         <p>
-          T-Tech was founded by <strong>Victor Kangacha (Tollar)</strong> from a singular vision: to challenge
-          the status quo of technical support and tech services. Tollar sought to "flip the script" on a
-          broken system — replacing slow, impersonal service with high-velocity, specialist-led solutions.
+          T-Tech was founded by <strong>Victor Kangacha (Tollar)</strong> from a singular vision: to challenge the status quo of technical support and services. Tollar sought to "flip the script" on a broken system — replacing slow, impersonal service with high-velocity, specialist-led solutions.
         </p>
         <p>
-          Today, that legacy is driven forward by Lead Operators <strong>Lewis (Smilee)</strong> and
-          <strong>Patrick (Pato)</strong>, who manage a robust network of qualified specialists and professional
-          referrals. We aren't just fixing machines — we are maintaining the momentum of the
-          modern professional.
+          Today, that legacy is driven forward by Lead Operators <strong>Lewis (Smilee)</strong> and <strong>Patrick (Pato)</strong>, who manage a robust network of qualified specialists and professional referrals. We aren't just fixing machines — we are maintaining the momentum of the modern professional.
         </p>
         <p>
-          From robust tech ecosystems to modern specialist services, T-Tech delivers
-          enterprise-grade solutions to homeowners, businesses, and institutions.
+          From hardware repair and software support to web development, CV writing, KRA activation, and portfolio design — T-Tech delivers a complete, specialist-grade tech ecosystem tailored to your needs.
         </p>
       </div>
     </div>
   </section>
 
-  <!-- TEAM -->
+  <div class="section-divider"></div>
+
+  <!-- SERVICES -->
   <section class="section">
+    <div class="section-inner">
+      <div class="section-label">What We Do</div>
+      <h2 class="section-h2">Elevate Your System.<br>Every Category Covered.</h2>
+      <p style="color:var(--grey-lt);font-size:.95rem;max-width:600px;line-height:1.7;">
+        Select a specialized service category when you enter the environment. Our specialists are on standby to handle every request with precision.
+      </p>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">🖥️</div>
+          <div class="service-name">Hardware</div>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">⚙️</div>
+          <div class="service-name">Software</div>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">🔧</div>
+          <div class="service-name">Servicing</div>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">💻</div>
+          <div class="service-name">Web Development</div>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">📄</div>
+          <div class="service-name">CV Development</div>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">📊</div>
+          <div class="service-name">KRA Activation / Returns</div>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">🧑‍💼</div>
+          <div class="service-name">Portfolios</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- TEAM -->
+  <section class="section" style="background:var(--bg2)">
     <div class="section-inner">
       <div class="section-label">The Team</div>
       <h2 class="section-h2">The people behind<br>every specialist task.</h2>
@@ -159,26 +207,28 @@
           <div class="team-initial">V</div>
           <div class="team-name">Victor Kangacha</div>
           <div class="team-handle">Tollar — Founder</div>
-          <p class="team-role">Visionary founder and architect of the T-Tech ecosystem. Built the company from the ground up with a singular mission to deliver spectacular, wallet-friendly tech services.</p>
+          <p class="team-role">Visionary founder and architect of the T-Tech ecosystem. Built the company from the ground up with a singular mission to deliver spectacular, wallet-friendly tech services. His philosophy: flip the script or get left behind.</p>
         </div>
         <div class="team-card">
           <div class="team-initial">L</div>
           <div class="team-name">Lewis</div>
           <div class="team-handle">Smilee — Lead Operator</div>
-          <p class="team-role">Manages day-to-day operations, specialist coordination, and client satisfaction across the service network. Drives quality and ensures on-time delivery every time.</p>
+          <p class="team-role">Manages day-to-day operations, specialist coordination, and client satisfaction across the entire service network. Drives quality, builds the digital infrastructure, and ensures on-time delivery every single time.</p>
         </div>
         <div class="team-card">
           <div class="team-initial">P</div>
           <div class="team-name">Patrick</div>
           <div class="team-handle">Pato — Lead Operator</div>
-          <p class="team-role">Oversees professional referrals, technical solutions, and business development partnerships. Ensures every project meets T-Tech's high standards of execution.</p>
+          <p class="team-role">Oversees professional referrals, technical installations, and business development partnerships. Ensures every project meets T-Tech's high standards of execution and that no client is left without a solution.</p>
         </div>
       </div>
     </div>
   </section>
 
+  <div class="section-divider"></div>
+
   <!-- WHY US -->
-  <section class="section" style="background:var(--bg2)">
+  <section class="section">
     <div class="section-inner">
       <div class="section-label">The Spectacular Difference</div>
       <h2 class="section-h2">Why choose T-Tech?</h2>
@@ -186,22 +236,22 @@
         <div class="why-card">
           <div class="why-icon">⚡</div>
           <div class="why-title">Spectacular Service</div>
-          <p class="why-desc">Our specialists provide an experience that merges technical mastery with a friendly, client-first approach.</p>
+          <p class="why-desc">Our specialists provide an experience that merges technical mastery with a friendly, client-first approach that goes beyond expectations.</p>
         </div>
         <div class="why-card">
           <div class="why-icon">🤝</div>
           <div class="why-title">Friendly Specialists</div>
-          <p class="why-desc">Every technician is vetted, certified, and trained to communicate clearly and work with precision.</p>
+          <p class="why-desc">Every technician is vetted and trained to communicate clearly, work precisely, and treat every client with professionalism and respect.</p>
         </div>
         <div class="why-card">
           <div class="why-icon">💰</div>
           <div class="why-title">Wallet-Friendly Pricing</div>
-          <p class="why-desc">We understand the high-stakes nature of your work, which is why we guarantee transparent, competitive pricing.</p>
+          <p class="why-desc">We understand the high-stakes nature of your work. We guarantee transparent, competitive pricing — no hidden costs, no surprises.</p>
         </div>
         <div class="why-card">
           <div class="why-icon">🕐</div>
           <div class="why-title">On Time — Every Time</div>
-          <p class="why-desc">Strict commitment to punctuality. We respect your schedule and deliver when we say we will.</p>
+          <p class="why-desc">Strict commitment to punctuality. We respect your schedule and your deadlines, and we deliver exactly when we say we will.</p>
         </div>
       </div>
     </div>
@@ -210,14 +260,14 @@
   <!-- CTA -->
   <div class="cta-strip">
     <h2>Ready to get started?</h2>
-    <p>Explore our full range of specialist tech services.</p>
+    <p>Enter the environment to submit a specialist request and get moving.</p>
     <a href="login.html" class="cta-btn">Enter Environment</a>
     <a href="index.html#contact" class="cta-ghost">Contact Us</a>
   </div>
 
   <!-- FOOTER -->
   <footer>
-    <span>&copy; 2026 T-Tech. All rights reserved.</span>
+    <span>&copy; 2026 T-Tech. All rights reserved. Flip the Script.</span>
     <a href="index.html">&#8592; Back to Main Site</a>
   </footer>
 
