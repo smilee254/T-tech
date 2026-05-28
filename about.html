@@ -10,8 +10,8 @@
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
-      --bg:#05060a;--bg2:#0b0d12;--border:rgba(255,255,255,0.08);
-      --accent:#e8ff47;--white:#fff;--grey:#6b7280;--grey-lt:#9ca3af;
+      --bg:#020c1b;--bg2:#041432;--border:rgba(255,255,255,0.08);
+      --accent:#3b82f6;--white:#fff;--grey:#64748b;--grey-lt:#94a3b8;
       --font-h:'Montserrat',sans-serif;--font-b:'Inter',sans-serif
     }
     html{scroll-behavior:smooth}
@@ -33,14 +33,14 @@
     .about-hero{
       min-height:100vh;display:flex;align-items:center;justify-content:center;
       position:relative;overflow:hidden;padding:8rem 5% 5rem;text-align:center;
-      background-image:url('assets/tech_bg.png');
+      background-image: linear-gradient(rgba(2, 12, 27, 0.82), rgba(2, 12, 27, 0.88)), url('https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1920&q=80');
       background-size:cover;background-position:center;background-attachment:fixed;
     }
-    .about-hero::before{content:'';position:absolute;inset:0;background:rgba(5,6,10,0.88)}
+    .about-hero::before{content:'';position:absolute;inset:0;background:rgba(2,12,27,0.7)}
     .about-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 50% 50%,transparent 0%,var(--bg) 75%)}
     .orb-hero{position:absolute;border-radius:50%;pointer-events:none}
-    .orb-1{top:-200px;left:-200px;width:700px;height:700px;background:radial-gradient(circle,rgba(232,255,71,0.1) 0%,transparent 70%);animation:pulse 10s ease-in-out infinite alternate}
-    .orb-2{bottom:-150px;right:-100px;width:550px;height:550px;background:radial-gradient(circle,rgba(232,255,71,0.05) 0%,transparent 70%);animation:pulse 14s ease-in-out infinite alternate-reverse}
+    .orb-1{top:-200px;left:-200px;width:700px;height:700px;background:radial-gradient(circle,rgba(59,130,246,0.1) 0%,transparent 70%);animation:pulse 10s ease-in-out infinite alternate}
+    .orb-2{bottom:-150px;right:-100px;width:550px;height:550px;background:radial-gradient(circle,rgba(59,130,246,0.05) 0%,transparent 70%);animation:pulse 14s ease-in-out infinite alternate-reverse}
     @keyframes pulse{from{transform:scale(1)}to{transform:scale(1.12)}}
     .hero-inner{position:relative;z-index:1;max-width:800px}
     .eyebrow{font-size:.7rem;font-weight:600;letter-spacing:.5em;text-transform:uppercase;color:var(--accent);margin-bottom:1.5rem}
@@ -64,8 +64,8 @@
       padding:2rem 1.5rem;text-align:center;transition:.3s;cursor:default;
       position:relative;overflow:hidden;
     }
-    .service-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(232,255,71,0.05),transparent);opacity:0;transition:.3s}
-    .service-card:hover{border-color:rgba(232,255,71,0.4);transform:translateY(-5px)}
+    .service-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(59,130,246,0.05),transparent);opacity:0;transition:.3s}
+    .service-card:hover{border-color:rgba(59,130,246,0.4);transform:translateY(-5px)}
     .service-card:hover::before{opacity:1}
     .service-icon{font-size:2.4rem;margin-bottom:1rem}
     .service-name{font-family:var(--font-h);font-weight:700;font-size:.9rem;letter-spacing:.05em;text-transform:uppercase;color:var(--white)}
@@ -73,10 +73,10 @@
     /* ── TEAM GRID ── */
     .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2rem;margin-top:3rem}
     .team-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:2.2rem;transition:.3s;position:relative;overflow:hidden}
-    .team-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(232,255,71,0.05),transparent);opacity:0;transition:.3s}
-    .team-card:hover{border-color:rgba(232,255,71,0.4);transform:translateY(-4px)}
+    .team-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(59,130,246,0.05),transparent);opacity:0;transition:.3s}
+    .team-card:hover{border-color:rgba(59,130,246,0.4);transform:translateY(-4px)}
     .team-card:hover::before{opacity:1}
-    .team-initial{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#556b2f);display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-weight:900;font-size:1.2rem;color:#000;margin-bottom:1.2rem}
+    .team-initial{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#1d4ed8);display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-weight:900;font-size:1.2rem;color:#fff;margin-bottom:1.2rem}
     .team-name{font-family:var(--font-h);font-weight:700;font-size:1.1rem;margin-bottom:.25rem}
     .team-handle{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.8rem}
     .team-role{font-size:.82rem;color:var(--grey);line-height:1.6}
@@ -92,8 +92,8 @@
     .cta-strip{background:var(--bg2);border-top:1px solid var(--border);padding:5rem 5%;text-align:center}
     .cta-strip h2{font-family:var(--font-h);font-weight:900;font-size:clamp(1.8rem,3.5vw,2.8rem);margin-bottom:1rem}
     .cta-strip p{color:var(--grey-lt);font-size:.92rem;margin-bottom:2rem}
-    .cta-btn{display:inline-flex;align-items:center;gap:.6rem;background:var(--accent);color:#000;font-family:var(--font-h);font-weight:900;font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;padding:1rem 2.2rem;border-radius:6px;transition:.3s}
-    .cta-btn:hover{background:var(--white);box-shadow:0 0 28px rgba(232,255,71,.22)}
+    .cta-btn{display:inline-flex;align-items:center;gap:.6rem;background:var(--accent);color:#fff;font-family:var(--font-h);font-weight:900;font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;padding:1rem 2.2rem;border-radius:6px;transition:.3s}
+    .cta-btn:hover{background:var(--white);color:var(--accent);box-shadow:0 0 28px rgba(59,130,246,.22)}
     .cta-ghost{display:inline-flex;align-items:center;margin-left:1rem;color:var(--grey-lt);font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:2px;transition:.2s}
     .cta-ghost:hover{color:var(--white);border-color:var(--white)}
 

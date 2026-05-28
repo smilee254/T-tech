@@ -18,7 +18,7 @@
     /* Clean, non-glassmorphic login styling */
     body {
       background-color: var(--bg-solid);
-      background-image: url('assets/tech_bg.png');
+      background-image: linear-gradient(rgba(2, 12, 27, 0.82), rgba(2, 12, 27, 0.88)), url('https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1920&q=80');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -32,7 +32,7 @@
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 27, 58, 0.9); /* Solid dark overlay, no blur/glassmorphism */
+      background: rgba(2, 12, 27, 0.6); /* Solid dark overlay */
       z-index: 0;
     }
     
@@ -42,9 +42,10 @@
       width: 100%;
       max-width: 450px;
       padding: 3rem;
-      background-color: #051329;
-      border: 1px solid #1a365d;
-      border-radius: 8px;
+      background-color: rgba(7, 30, 64, 0.85);
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      backdrop-filter: blur(12px);
+      border-radius: 12px;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
     }
     
@@ -65,7 +66,7 @@
     }
     
     .login-logo .logo-e {
-      color: #e8ff47;
+      color: #3b82f6;
     }
     
     .login-title {
@@ -99,8 +100,8 @@
     
     .form-control {
       width: 100%;
-      background-color: #0a192f;
-      border: 1px solid #1a365d;
+      background-color: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       color: var(--white);
       padding: 1rem;
       font-family: var(--font-body);
@@ -111,14 +112,14 @@
     
     .form-control:focus {
       outline: none;
-      border-color: #e8ff47;
-      background-color: #0d213f;
+      border-color: #3b82f6;
+      background-color: rgba(59, 130, 246, 0.05);
     }
     
     .btn-submit {
       width: 100%;
-      background-color: #e8ff47;
-      color: #000;
+      background-color: #3b82f6;
+      color: #fff;
       border: none;
       padding: 1.2rem;
       font-family: var(--font-head);
@@ -133,7 +134,7 @@
     }
     
     .btn-submit:hover {
-      background-color: #d4ed35;
+      background-color: #60a5fa;
     }
     
     .btn-submit:active {
@@ -153,7 +154,7 @@
     }
     
     .back-link:hover {
-      color: #e8ff47;
+      color: #3b82f6;
     }
   </style>
 </head>

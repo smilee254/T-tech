@@ -1,18 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap');
 
 :root {
-  --bg-solid: #001B3A;
-  --bg: rgba(0, 27, 58, 0.5);
-  --bg2: rgba(0, 38, 77, 0.55);
-  --bg3: rgba(0, 51, 102, 0.6);
+  --bg-solid: #020c1b;
+  --bg: rgba(2, 12, 27, 0.6);
+  --bg2: rgba(4, 20, 45, 0.65);
+  --bg3: rgba(7, 30, 65, 0.7);
   --blur: blur(16px);
-  --red: #FFFFFF;
-  --red-light: #F0F4F8;
-  --red-dark: #CCD6F6;
+  --accent: #3b82f6;
+  --accent-hover: #60a5fa;
+  --accent-dark: #1d4ed8;
+  --red: #3b82f6;
+  --red-light: #60a5fa;
+  --red-dark: #1d4ed8;
   --white: #FFFFFF;
-  --grey: #8892b0;
-  --grey-light: #a8b2d1;
-  --border: rgba(255, 255, 255, 0.1);
+  --grey: #64748b;
+  --grey-light: #94a3b8;
+  --border: rgba(255, 255, 255, 0.08);
   --font-head: 'Montserrat', sans-serif;
   --font-body: 'Inter', sans-serif;
 }
@@ -32,7 +35,7 @@ html {
 
 body {
   background-color: var(--bg-solid);
-  background-image: linear-gradient(rgba(10, 25, 47, 0.75), rgba(10, 25, 47, 0.85)), url('assets/tech_bg.png');
+  background-image: linear-gradient(rgba(2, 12, 27, 0.82), rgba(2, 12, 27, 0.88)), url('https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1920&q=80');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -1505,7 +1508,7 @@ body {
   transform: translateX(0);
 }
 
-/* ── FIXED EPICOM LOGO ── */
+/* ── FIXED T-TECH LOGO ── */
 .fixed-logo {
   position: fixed;
   bottom: 2rem;

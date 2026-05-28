@@ -7,176 +7,206 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #05060a;
-      --bg2: #0b0d12;
-      --panel: #0a192f;
-      --border: rgba(232, 255, 71, 0.2);
-      --accent: #e8ff47;
-      --accent-hover: #d4ed35;
-      --text: #fff;
-      --text-muted: #9ca3af;
+      --navy: #020c1b;
+      --navy2: #041432;
+      --panel: #071e40;
+      --panel2: #0a2550;
+      --blue: #3b82f6;
+      --blue-hover: #60a5fa;
+      --blue-dark: #1d4ed8;
+      --white: #fff;
+      --muted: #94a3b8;
+      --border: rgba(59, 130, 246, 0.15);
+      --border-dim: rgba(255,255,255,0.06);
       --font-h: 'Montserrat', sans-serif;
       --font-b: 'Inter', sans-serif;
     }
-    
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
     body {
-      background-color: var(--bg);
-      color: var(--text);
+      background-color: var(--navy);
+      background-image:
+        linear-gradient(rgba(2,12,27,0.88), rgba(2,12,27,0.92)),
+        url('https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: var(--white);
       font-family: var(--font-b);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
-    
-    /* Navbar */
+
+    /* ── NAVBAR ── */
     .navbar {
-      background-color: rgba(5, 6, 10, 0.95);
+      background: rgba(2,12,27,0.9);
+      backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
-      padding: 1rem 2rem;
+      padding: 1rem 2.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
-    
-    .nav-logo {
-      font-family: var(--font-h);
-      font-weight: 900;
-      font-size: 1.5rem;
-      color: var(--text);
-      text-decoration: none;
-      letter-spacing: 0.1em;
-    }
-    
-    .nav-logo span { color: var(--accent); }
-    
-    .nav-user {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    
-    .logout-btn {
-      background: none;
-      border: 1px solid var(--text-muted);
-      color: var(--text-muted);
-      padding: 0.4rem 1rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      transition: 0.2s;
-    }
-    
-    .logout-btn:hover {
-      border-color: var(--text);
-      color: var(--text);
-    }
-    
-    /* Main Content */
-    .container {
+    .nav-logo { font-family:var(--font-h); font-weight:900; font-size:1.4rem; color:var(--white); text-decoration:none; letter-spacing:.1em; }
+    .nav-logo span { color: var(--blue); }
+    .nav-user { display:flex; align-items:center; gap:1rem; }
+    .user-badge { background: var(--panel); border: 1px solid var(--border); border-radius: 50px; padding: .4rem 1rem; font-size:.8rem; color:var(--blue-hover); font-weight:600; }
+    .btn-sm { background:none; border:1px solid var(--border-dim); color:var(--muted); padding:.4rem 1rem; border-radius:4px; cursor:pointer; font-size:.75rem; text-transform:uppercase; letter-spacing:.05em; transition:.2s; font-family:var(--font-b); }
+    .btn-sm:hover { border-color:var(--blue); color:var(--white); }
+
+    /* ── LAYOUT ── */
+    .bay-layout {
       flex: 1;
-      max-width: 800px;
-      margin: 3rem auto;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      min-height: calc(100vh - 65px);
+    }
+
+    /* ── LEFT SIDEBAR ── */
+    .sidebar {
+      background: rgba(7,30,64,0.6);
+      border-right: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .sidebar-greeting h2 { font-family:var(--font-h); font-size:1.1rem; font-weight:700; margin-bottom:.3rem; }
+    .sidebar-greeting p { font-size:.82rem; color:var(--muted); line-height:1.5; }
+    .step-trail { display:flex; flex-direction:column; gap:.5rem; margin-top:.5rem; }
+    .step { display:flex; align-items:center; gap:.8rem; font-size:.78rem; color:var(--muted); }
+    .step-dot { width:8px; height:8px; border-radius:50%; background:var(--border-dim); border:1px solid var(--border); flex-shrink:0; transition:.3s; }
+    .step.active .step-dot { background:var(--blue); border-color:var(--blue); box-shadow:0 0 8px rgba(59,130,246,.5); }
+    .step.active { color:var(--white); font-weight:600; }
+    .step.done .step-dot { background:var(--blue-dark); border-color:var(--blue-dark); }
+
+    .section-label { font-size:.65rem; font-weight:700; letter-spacing:.4em; text-transform:uppercase; color:var(--blue); margin-bottom:1rem; }
+    
+    .service-list { display:flex; flex-direction:column; gap:.6rem; }
+    .svc-btn {
+      display: flex; align-items:center; gap:.9rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-dim);
+      border-radius: 10px;
+      padding: .85rem 1rem;
+      cursor: pointer;
+      transition: .2s;
+      text-align: left;
       width: 100%;
-      padding: 0 2rem;
     }
-    
-    .header {
-      margin-bottom: 2rem;
+    .svc-btn:hover { background: rgba(59,130,246,0.08); border-color:var(--border); }
+    .svc-btn.active { background: rgba(59,130,246,0.15); border-color:var(--blue); }
+    .svc-icon { font-size:1.3rem; width:36px; height:36px; display:flex; align-items:center; justify-content:center; background:rgba(59,130,246,0.1); border-radius:8px; flex-shrink:0; }
+    .svc-text strong { display:block; font-size:.85rem; font-weight:600; color:var(--white); }
+    .svc-text span { font-size:.72rem; color:var(--muted); }
+
+    /* ── RIGHT PANEL ── */
+    .main-panel {
+      padding: 2.5rem 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
     }
-    
-    .title {
-      font-family: var(--font-h);
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
+
+    .welcome-state {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 1.5rem;
+      padding: 3rem;
     }
-    
-    .subtitle {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-    }
-    
-    /* Form Panel */
-    .panel {
-      background-color: var(--panel);
+    .welcome-state .big-icon { font-size:3.5rem; opacity:.7; }
+    .welcome-state h3 { font-family:var(--font-h); font-size:1.6rem; font-weight:700; }
+    .welcome-state p { color:var(--muted); font-size:.95rem; max-width:400px; line-height:1.7; }
+    .welcome-state .arrow { color:var(--blue); font-size:.85rem; font-weight:600; display:flex; align-items:center; gap:.5rem; margin-top:.5rem; }
+
+    /* ── FORM PANEL ── */
+    .form-panel { display:none; flex-direction:column; gap:1.5rem; }
+    .form-panel.active { display:flex; }
+
+    .form-header { display:flex; align-items:center; gap:1rem; }
+    .form-header .back-btn { background:none; border:1px solid var(--border-dim); color:var(--muted); width:36px; height:36px; border-radius:8px; cursor:pointer; font-size:1rem; transition:.2s; display:flex; align-items:center; justify-content:center; }
+    .form-header .back-btn:hover { border-color:var(--blue); color:var(--white); }
+    .form-header h3 { font-family:var(--font-h); font-size:1.4rem; font-weight:700; }
+    .form-header .svc-tag { background:rgba(59,130,246,.15); border:1px solid var(--border); color:var(--blue-hover); font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; padding:.3rem .8rem; border-radius:20px; }
+
+    .form-card {
+      background: rgba(7,30,64,0.5);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 16px;
       padding: 2rem;
     }
-    
-    .form-group {
-      margin-bottom: 1.5rem;
+    label { display:block; font-size:.75rem; font-weight:600; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin-bottom:.5rem; }
+    textarea, select, input[type=text] {
+      width:100%; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.08);
+      color:var(--white); padding:1rem; border-radius:10px;
+      font-family:var(--font-b); font-size:.95rem; transition:.2s; resize:vertical;
     }
-    
-    label {
-      display: block;
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-      margin-bottom: 0.5rem;
+    textarea { min-height:140px; }
+    textarea:focus, select:focus, input:focus { outline:none; border-color:var(--blue); background:rgba(59,130,246,0.05); }
+
+    .urgency-row { display:grid; grid-template-columns: repeat(3,1fr); gap:.8rem; }
+    .urgency-opt { display:none; }
+    .urgency-opt + label {
+      display:flex; flex-direction:column; align-items:center; gap:.4rem;
+      background:rgba(255,255,255,0.03); border:1px solid var(--border-dim);
+      border-radius:10px; padding:1rem .8rem; cursor:pointer; transition:.2s;
+      text-transform:none; letter-spacing:0; font-size:.8rem; color:var(--muted); font-weight:500;
     }
-    
-    input, select, textarea {
-      width: 100%;
-      background-color: rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--text);
-      padding: 1rem;
-      border-radius: 4px;
-      font-family: var(--font-b);
-      font-size: 0.95rem;
-      transition: border-color 0.2s;
-    }
-    
-    input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
-    
-    textarea {
-      resize: vertical;
-      min-height: 120px;
-    }
-    
+    .urgency-opt + label .u-icon { font-size:1.4rem; }
+    .urgency-opt:checked + label { background:rgba(59,130,246,0.15); border-color:var(--blue); color:var(--white); }
+
     .submit-btn {
-      background-color: var(--accent);
-      color: #000;
+      background: var(--blue);
+      color: #fff;
       border: none;
-      padding: 1rem 2rem;
+      padding: 1.1rem 2rem;
+      border-radius: 10px;
       font-family: var(--font-h);
-      font-weight: 800;
-      font-size: 0.9rem;
+      font-weight: 700;
+      font-size: .9rem;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      border-radius: 4px;
+      letter-spacing: .1em;
       cursor: pointer;
       width: 100%;
-      transition: 0.2s;
+      transition: .2s;
     }
-    
-    .submit-btn:hover {
-      background-color: var(--accent-hover);
-    }
-    
-    /* Success Message */
-    .success-msg {
-      display: none;
-      background-color: rgba(232, 255, 71, 0.1);
-      border: 1px solid var(--accent);
-      color: var(--accent);
-      padding: 1rem;
-      border-radius: 4px;
-      margin-bottom: 1.5rem;
-      font-weight: 500;
+    .submit-btn:hover { background: var(--blue-hover); transform: translateY(-1px); }
+    .submit-btn:active { transform: translateY(0); }
+    .submit-btn:disabled { background:var(--muted); cursor:not-allowed; transform:none; }
+
+    .success-card {
+      display:none;
+      background: rgba(59,130,246,0.08);
+      border: 1px solid rgba(59,130,246,0.3);
+      border-radius: 16px;
+      padding: 2.5rem;
       text-align: center;
+      gap: 1rem;
+      flex-direction: column;
+      align-items: center;
+    }
+    .success-card.show { display:flex; }
+    .success-card .s-icon { font-size:2.5rem; }
+    .success-card h3 { font-family:var(--font-h); font-size:1.2rem; font-weight:700; }
+    .success-card p { color:var(--muted); font-size:.9rem; }
+    .success-card .new-req-btn { background:none; border:1px solid var(--border); color:var(--blue-hover); padding:.7rem 1.5rem; border-radius:8px; cursor:pointer; font-size:.8rem; font-weight:600; text-transform:uppercase; letter-spacing:.05em; margin-top:.5rem; transition:.2s; font-family:var(--font-b); }
+    .success-card .new-req-btn:hover { border-color:var(--blue); color:var(--white); }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:768px) {
+      .bay-layout { grid-template-columns:1fr; }
+      .sidebar { border-right:none; border-bottom:1px solid var(--border); }
+      .main-panel { padding:1.5rem; }
+      .service-list { display:grid; grid-template-columns:1fr 1fr; }
     }
   </style>
 </head>
@@ -185,67 +215,138 @@
   <nav class="navbar">
     <a href="index.html" class="nav-logo"><span>T</span>-TECH</a>
     <div class="nav-user">
-      <span id="userDisplay">Loading...</span>
-      <button class="logout-btn" onclick="logout()">Disconnect</button>
+      <span class="user-badge" id="userBadge">Loading...</span>
+      <button class="btn-sm" onclick="logout()">Disconnect</button>
     </div>
   </nav>
 
-  <div class="container">
-    <div class="header">
-      <h1 class="title">Service Bay</h1>
-      <p class="subtitle">Submit a new tech support or installation request to our specialists.</p>
-    </div>
+  <div class="bay-layout">
 
-    <div class="success-msg" id="successMsg">Request submitted successfully! A specialist will contact you shortly.</div>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-greeting">
+        <h2>Welcome back 👋</h2>
+        <p id="greetText">Identify a service and our specialist team will get back to you shortly.</p>
+        <div class="step-trail" id="stepTrail">
+          <div class="step active" id="step1"><div class="step-dot"></div><span>Choose a service</span></div>
+          <div class="step" id="step2"><div class="step-dot"></div><span>Describe your need</span></div>
+          <div class="step" id="step3"><div class="step-dot"></div><span>Request submitted</span></div>
+        </div>
+      </div>
 
-    <div class="panel">
-      <form id="requestForm" onsubmit="submitRequest(event)">
-        <div class="form-group">
-          <label>Request Type</label>
-          <select id="reqType" required>
-            <option value="" disabled selected>Select a service category</option>
-            <option value="Hardware">Hardware</option>
-            <option value="Software">Software</option>
-            <option value="Servicing">Servicing</option>
-            <option value="Web Development">Web Development</option>
-            <option value="CV Development">CV Development</option>
-            <option value="KRA Activation/Returns">KRA Activation / Returns</option>
-            <option value="Portfolios">Portfolios</option>
-          </select>
+      <div>
+        <div class="section-label">Service Categories</div>
+        <div class="service-list" id="serviceList">
+          <button class="svc-btn" onclick="selectService('Hardware','🖥️','Laptop, desktop, peripherals & components')" id="svc-Hardware">
+            <div class="svc-icon">🖥️</div>
+            <div class="svc-text"><strong>Hardware</strong><span>Devices & components</span></div>
+          </button>
+          <button class="svc-btn" onclick="selectService('Software','⚙️','OS, drivers, apps & configuration')" id="svc-Software">
+            <div class="svc-icon">⚙️</div>
+            <div class="svc-text"><strong>Software</strong><span>OS, apps & config</span></div>
+          </button>
+          <button class="svc-btn" onclick="selectService('Servicing','🔧','Cleaning, tuning & preventive maintenance')" id="svc-Servicing">
+            <div class="svc-icon">🔧</div>
+            <div class="svc-text"><strong>Servicing</strong><span>Maintenance & tuning</span></div>
+          </button>
+          <button class="svc-btn" onclick="selectService('Web Development','💻','Websites, apps & digital platforms')" id="svc-Web Development">
+            <div class="svc-icon">💻</div>
+            <div class="svc-text"><strong>Web Development</strong><span>Sites & digital platforms</span></div>
+          </button>
+          <button class="svc-btn" onclick="selectService('CV Development','📄','Professional CVs & cover letters')" id="svc-CV Development">
+            <div class="svc-icon">📄</div>
+            <div class="svc-text"><strong>CV Development</strong><span>Resumes & cover letters</span></div>
+          </button>
+          <button class="svc-btn" onclick="selectService('KRA Activation/Returns','📊','KRA PIN activation & tax returns')" id="svc-KRA Activation/Returns">
+            <div class="svc-icon">📊</div>
+            <div class="svc-text"><strong>KRA Activation / Returns</strong><span>Tax & compliance</span></div>
+          </button>
+          <button class="svc-btn" onclick="selectService('Portfolios','🧑‍💼','Personal & professional portfolio sites')" id="svc-Portfolios">
+            <div class="svc-icon">🧑‍💼</div>
+            <div class="svc-text"><strong>Portfolios</strong><span>Showcase your work</span></div>
+          </button>
         </div>
-        
-        <div class="form-group">
-          <label>Urgency Level</label>
-          <select id="reqUrgency" required>
-            <option value="Normal">Normal (24-48 hours)</option>
-            <option value="High">High (Same Day)</option>
-            <option value="Critical">Critical (Immediate Response)</option>
-          </select>
+      </div>
+    </aside>
+
+    <!-- MAIN PANEL -->
+    <main class="main-panel">
+
+      <!-- Welcome State -->
+      <div class="welcome-state" id="welcomeState">
+        <div class="big-icon">🛠️</div>
+        <h3>T-Tech Service Bay</h3>
+        <p>Select a service category from the left to get started. Our specialists will review your request and reach out within the hour.</p>
+        <div class="arrow">← Pick a category to begin</div>
+      </div>
+
+      <!-- Form Panel -->
+      <div class="form-panel" id="formPanel">
+        <div class="form-header">
+          <button class="back-btn" onclick="resetForm()" title="Back">←</button>
+          <div>
+            <div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.2rem;">Service Request</div>
+            <h3 id="formTitle">Hardware</h3>
+          </div>
+          <span class="svc-tag" id="svcTag">Hardware</span>
         </div>
-        
-        <div class="form-group">
-          <label>Description of Issue / Need</label>
-          <textarea id="reqDesc" placeholder="Please provide details about your request..." required></textarea>
+
+        <div class="form-card">
+          <form id="reqForm" onsubmit="submitRequest(event)">
+            <div style="margin-bottom:1.5rem;">
+              <label>Urgency Level</label>
+              <div class="urgency-row">
+                <div>
+                  <input type="radio" name="urgency" id="u-normal" class="urgency-opt" value="Normal" checked>
+                  <label for="u-normal"><span class="u-icon">🟢</span>Normal<span style="font-size:.7rem;color:var(--muted);">24–48 hrs</span></label>
+                </div>
+                <div>
+                  <input type="radio" name="urgency" id="u-high" class="urgency-opt" value="High">
+                  <label for="u-high"><span class="u-icon">🟡</span>High<span style="font-size:.7rem;color:var(--muted);">Same day</span></label>
+                </div>
+                <div>
+                  <input type="radio" name="urgency" id="u-critical" class="urgency-opt" value="Critical">
+                  <label for="u-critical"><span class="u-icon">🔴</span>Critical<span style="font-size:.7rem;color:var(--muted);">Immediate</span></label>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-bottom:1.5rem;">
+              <label for="reqDesc">Describe your issue or request</label>
+              <textarea id="reqDesc" placeholder="Be as specific as possible — device model, error messages, what you need built, etc." required></textarea>
+            </div>
+
+            <div style="margin-bottom:1.5rem;">
+              <label for="reqContact">Preferred contact (optional)</label>
+              <input type="text" id="reqContact" placeholder="WhatsApp number or alternate email">
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">Send Request to Specialists</button>
+          </form>
         </div>
-        
-        <button type="submit" class="submit-btn">Submit Request</button>
-      </form>
-    </div>
+
+        <!-- Success Card -->
+        <div class="success-card" id="successCard">
+          <div class="s-icon">✅</div>
+          <h3>Request Received!</h3>
+          <p>A T-Tech specialist will review your request and contact you shortly. Stay ready.</p>
+          <button class="new-req-btn" onclick="resetForm()">Submit Another Request</button>
+        </div>
+      </div>
+
+    </main>
   </div>
 
   <script>
-    // Authentication Check
+    // ── AUTH CHECK ──
     const currentUser = localStorage.getItem('ttech_current_user');
-    if (!currentUser) {
-      window.location.href = 'login.html';
-    } else {
-      document.getElementById('userDisplay').textContent = currentUser;
-    }
-    
-    // Admins shouldn't be here (ideally)
-    const admins = ['smilee@t-tech.com', 'pato@t-tech.com', 'tollar@t-tech.com', 'admin@t-tech.com'];
-    if (admins.includes(currentUser)) {
-      window.location.href = 'admin.html';
+    const admins = ['smilee@t-tech.com','pato@t-tech.com','tollar@t-tech.com','admin@t-tech.com'];
+    if (!currentUser) { window.location.href = 'login.html'; }
+    else if (admins.includes(currentUser)) { window.location.href = 'admin.html'; }
+    else {
+      document.getElementById('userBadge').textContent = currentUser;
+      document.getElementById('greetText').textContent =
+        'Select a service and our team will reach out shortly.';
     }
 
     function logout() {
@@ -253,35 +354,81 @@
       window.location.href = 'login.html';
     }
 
+    let selectedService = '';
+
+    function selectService(name, icon, desc) {
+      selectedService = name;
+
+      // Highlight active sidebar button
+      document.querySelectorAll('.svc-btn').forEach(b => b.classList.remove('active'));
+      const btn = document.getElementById('svc-' + name);
+      if (btn) btn.classList.add('active');
+
+      // Update form header
+      document.getElementById('formTitle').textContent = icon + '  ' + name;
+      document.getElementById('svcTag').textContent = name;
+
+      // Show form, hide welcome
+      document.getElementById('welcomeState').style.display = 'none';
+      document.getElementById('formPanel').classList.add('active');
+      document.getElementById('successCard').classList.remove('show');
+      document.getElementById('reqForm').style.display = 'block';
+
+      // Update step indicator
+      document.getElementById('step1').classList.remove('active');
+      document.getElementById('step1').classList.add('done');
+      document.getElementById('step2').classList.add('active');
+      document.getElementById('step3').classList.remove('active');
+    }
+
+    function resetForm() {
+      selectedService = '';
+      document.querySelectorAll('.svc-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('welcomeState').style.display = '';
+      document.getElementById('formPanel').classList.remove('active');
+      document.getElementById('reqForm').reset();
+
+      // Reset steps
+      document.getElementById('step1').classList.add('active');
+      document.getElementById('step1').classList.remove('done');
+      document.getElementById('step2').classList.remove('active');
+      document.getElementById('step3').classList.remove('active');
+    }
+
     function submitRequest(e) {
       e.preventDefault();
-      
-      const type = document.getElementById('reqType').value;
-      const urgency = document.getElementById('reqUrgency').value;
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      const urgency = document.querySelector('input[name="urgency"]:checked').value;
       const desc = document.getElementById('reqDesc').value;
-      
-      const requestData = {
-        id: 'REQ-' + Math.floor(Math.random() * 10000),
+      const contact = document.getElementById('reqContact').value;
+
+      const req = {
+        id: 'REQ-' + Date.now().toString(36).toUpperCase(),
         user: currentUser,
-        type: type,
-        urgency: urgency,
-        desc: desc,
+        type: selectedService,
+        urgency,
+        desc,
+        contact,
         date: new Date().toLocaleString(),
         status: 'Pending'
       };
-      
-      // Save to localStorage
+
       let requests = JSON.parse(localStorage.getItem('ttech_requests')) || [];
-      requests.push(requestData);
+      requests.push(req);
       localStorage.setItem('ttech_requests', JSON.stringify(requests));
-      
-      // Show success message and reset form
-      document.getElementById('successMsg').style.display = 'block';
-      document.getElementById('requestForm').reset();
-      
+
       setTimeout(() => {
-        document.getElementById('successMsg').style.display = 'none';
-      }, 5000);
+        document.getElementById('reqForm').style.display = 'none';
+        document.getElementById('successCard').classList.add('show');
+        document.getElementById('step2').classList.remove('active');
+        document.getElementById('step2').classList.add('done');
+        document.getElementById('step3').classList.add('active');
+        btn.disabled = false;
+        btn.textContent = 'Send Request to Specialists';
+      }, 800);
     }
   </script>
 </body>
