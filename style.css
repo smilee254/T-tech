@@ -32,7 +32,7 @@ html {
 
 body {
   background-color: var(--bg-solid);
-  background-image: linear-gradient(rgba(10, 25, 47, 0.75), rgba(10, 25, 47, 0.85)), url('assets/logo-background.jpg');
+  background-image: linear-gradient(rgba(10, 25, 47, 0.75), rgba(10, 25, 47, 0.85)), url('assets/tech_bg.png');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;

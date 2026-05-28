@@ -1,4 +1,4 @@
-/* animation.js - Detailed 2D SVG Animation */
+git /* animation.js - Detailed 2D SVG Animation */
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('animationContainer');
   if (!container) return;
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         '<div class="anim-client walking" id="animClient">' + svgChar + '</div>' +
         '<div class="anim-card" id="animCard"></div>' +
         '<div class="anim-screen-zoom" id="animScreen">' +
-          '<div style="color:#aaa; font-size:1.3rem; margin-bottom:22px; border-bottom:1px solid #333; padding-bottom:15px;">EPICOM GUEST SYSTEM v2.0</div>' +
+          '<div style="color:#aaa; font-size:1.3rem; margin-bottom:22px; border-bottom:1px solid #333; padding-bottom:15px;">T-TECH GUEST SYSTEM v2.0</div>' +
           '<div id="animTyping" class="anim-typing"></div>' +
         '</div>' +
       '</div>' +
